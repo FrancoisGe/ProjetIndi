@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="phidget21">
+    <CLASSES>
+      <root url="jar://C:/Projet individuel/JavaJNI/Simple Examples/phidget21.jar!/" />
+      <root url="file://C:/mysql-connector-java-5.1.40" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://C:/mysql-connector-java-5.1.40/src" />
+    </SOURCES>
+    <jarDirectory url="file://C:/mysql-connector-java-5.1.40" recursive="false" />
+  </library>
+</component>
