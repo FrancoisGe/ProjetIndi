@@ -17,11 +17,13 @@ public class SensorChangeListenerOp implements SensorChangeListener {
 
     private PrintWriter out ;
     private InterfaceKitPhidget ik;
+    private Integer i;
 
-    public SensorChangeListenerOp(PrintWriter out, InterfaceKitPhidget ik){
+    public SensorChangeListenerOp(PrintWriter out, InterfaceKitPhidget ik,Integer i){
 
         this.out = out;
         this.ik=ik;
+        this.i=i;
     }
     @Override
     public void sensorChanged(SensorChangeEvent sensorChangeEvent) {
@@ -38,8 +40,11 @@ public class SensorChangeListenerOp implements SensorChangeListener {
         JsonObject json = new JsonObject();
         json.addProperty("hour",hour);
         json.addProperty("Value",x);
-        System.out.print(json);
+        System.out.println(json);
         // String message = gson.toJson(json);
+        i=i+1;
+        System.out.println("envoie :"+i);
+
         out.println(json);
         out.flush();
     }

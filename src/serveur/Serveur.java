@@ -20,14 +20,20 @@ public class Serveur {
         BufferedReader in = null;
 
 
+
+
         try{
             socketserver = new ServerSocket(2000);
             socket= socketserver.accept();
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream());
+
 
 
             Thread t = new Thread(new Reception(in));
+            Thread t1 = new Thread(new Envoie(out));
             t.start();
+            t1.start();
 
         } catch (IOException e) {
             e.printStackTrace();

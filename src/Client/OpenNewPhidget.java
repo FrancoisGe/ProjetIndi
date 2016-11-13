@@ -19,7 +19,7 @@ public class OpenNewPhidget {
 
 
 
-    public static InterfaceKitPhidget initIK(int numPhidget, PrintWriter out) throws Exception {
+    public static InterfaceKitPhidget initIK(int numPhidget, PrintWriter out,Integer i) throws Exception {
         InterfaceKitPhidget ik = new InterfaceKitPhidget();
 
         System.out.println(Phidget.getLibraryVersion());
@@ -37,7 +37,7 @@ public class OpenNewPhidget {
         });
 
 
-       ik.addSensorChangeListener(new SensorChangeListenerOp(out,ik));
+       ik.addSensorChangeListener(new SensorChangeListenerOp(out,ik,i));
         ik.open(numPhidget);
         Date date =new Date();
         System.out.println(date);

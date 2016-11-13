@@ -18,15 +18,17 @@ public class Envoie implements Runnable{
     private Date date ;
     private JsonObject json;
     private Gson gson;
+    private Integer i;
 
-    public Envoie(PrintWriter out){
+    public Envoie(PrintWriter out,Integer i){
         this.out = out;
+        this.i =i;
     }
 
     @Override
     public void run() {
         try {
-           ik= OpenNewPhidget.initIK(317446,out);
+           ik= OpenNewPhidget.initIK(317446,out,i);
 
 
         } catch (Exception e) {
