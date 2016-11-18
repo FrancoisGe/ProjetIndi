@@ -19,7 +19,7 @@ public class OpenNewPhidget {
 
 
 
-    public static InterfaceKitPhidget initIK(int numPhidget, PrintWriter out,Integer i) throws Exception {
+    public static InterfaceKitPhidget initIK(int numPhidget, PrintWriter out,int[] i) throws Exception {
         InterfaceKitPhidget ik = new InterfaceKitPhidget();
 
         System.out.println(Phidget.getLibraryVersion());

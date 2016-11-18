@@ -6,6 +6,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
 
 /**
  * Created by François on 29-10-16.
@@ -19,6 +24,10 @@ public class Serveur {
         PrintWriter out = null;
         BufferedReader in = null;
 
+        int[] i = {0};
+
+        Connection conn;
+
 
 
 
@@ -29,14 +38,41 @@ public class Serveur {
             out = new PrintWriter(socket.getOutputStream());
 
 
+            Class.forName("org.sqlite.JDBC");
+            System.out.println("Driver O.K.");
+            conn = DriverManager.getConnection("jdbc:sqlite:BaseDeDonnees.db");
+            System.out.println("Opened database successfully");
 
-            Thread t = new Thread(new Reception(in));
-            Thread t1 = new Thread(new Envoie(out));
-            t.start();
-            t1.start();
+
+            Statement statement = conn.createStatement();
+
+
+            Thread reception = new Thread(new Reception(in,i,statement));
+            Thread envoie = new Thread(new Envoie(out,i));
+            Thread screen = new Thread(new UptateDataScreen(statement));
+            reception.start();
+            envoie.start();
+            screen.start();
+
+
+            reception.wait();
+            envoie.wait();
+            screen.wait();
+
+            socket.close();
+            statement.close();
+            conn.close();
 
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }catch ( Exception e ) {
         }
+
     }
 }

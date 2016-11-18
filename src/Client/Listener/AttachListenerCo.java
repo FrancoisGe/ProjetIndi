@@ -15,7 +15,7 @@ public class AttachListenerCo implements AttachListener{
 
     public AttachListenerCo(Socket socket){
         try {
-            System.out.print("je suis la");
+
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {

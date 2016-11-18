@@ -10,8 +10,8 @@ import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
  */
 public class Reception implements Runnable {
     private BufferedReader in;
-    private Integer i;
-    public Reception(BufferedReader in,Integer i){
+    private int[] i;
+    public Reception(BufferedReader in,int[] i){
         this.in =in;
         this.i=i;
     }
@@ -20,11 +20,12 @@ public class Reception implements Runnable {
     public void run() {
         while (true){
             try {
-                System.out.println("je suis la");
+
                 String message = in.readLine();
                 int m = Integer.parseInt(message);//Recoit le nombre de packet deja recu par le serveur, on va utiliser un objet pour parler entre les 2 thread
-                i=i-m;
-                System.out.println("reception :"+i);
+                System.out.println("reception : "+ m);
+                i[0]=i[0]-m;
+
 
             } catch (IOException e) {
                 e.printStackTrace();

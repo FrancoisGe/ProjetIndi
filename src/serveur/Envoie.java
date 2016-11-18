@@ -7,10 +7,11 @@ import java.io.PrintWriter;
  */
 public class Envoie implements Runnable{
 
-    private Integer i;
+    private int[] i;
     private PrintWriter out;
+    private int send ;
 
-    public Envoie(PrintWriter out){
+    public Envoie(PrintWriter out,int[] i){
         this.i=i;
         this.out=out;
 
@@ -20,10 +21,15 @@ public class Envoie implements Runnable{
         while (true) {
 
 
-            out.println(5);
-            out.flush();
+
             try {
-                wait(1000);
+                System.out.println("je viens d envoyer un "+ i[0]);
+                send=i[0];
+                out.println(i[0]);
+                i[0]=i[0]-send;
+                out.flush();
+
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

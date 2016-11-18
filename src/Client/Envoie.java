@@ -15,12 +15,10 @@ public class Envoie implements Runnable{
 
     private  PrintWriter out;
     private InterfaceKitPhidget ik;
-    private Date date ;
-    private JsonObject json;
-    private Gson gson;
-    private Integer i;
 
-    public Envoie(PrintWriter out,Integer i){
+    private int[] i;
+
+    public Envoie(PrintWriter out,int[] i){
         this.out = out;
         this.i =i;
     }

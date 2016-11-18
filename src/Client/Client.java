@@ -24,7 +24,7 @@ public class Client {
         PrintWriter out = null;
         BufferedReader in = null;
 
-        Integer i = 0;
+        int i[] = {0};
 
 
 

@@ -17,9 +17,9 @@ public class SensorChangeListenerOp implements SensorChangeListener {
 
     private PrintWriter out ;
     private InterfaceKitPhidget ik;
-    private Integer i;
+    private int[] i;
 
-    public SensorChangeListenerOp(PrintWriter out, InterfaceKitPhidget ik,Integer i){
+    public SensorChangeListenerOp(PrintWriter out, InterfaceKitPhidget ik,int[] i){
 
         this.out = out;
         this.ik=ik;
@@ -27,7 +27,7 @@ public class SensorChangeListenerOp implements SensorChangeListener {
     }
     @Override
     public void sensorChanged(SensorChangeEvent sensorChangeEvent) {
-        System.out.println("coucou");
+
         int x= 0;
         try {
             x = ik.getSensorValue(0);
@@ -37,13 +37,14 @@ public class SensorChangeListenerOp implements SensorChangeListener {
         Date date = new Date();
         long hour =   date.getTime();
 
+
         JsonObject json = new JsonObject();
-        json.addProperty("hour",hour);
+        json.addProperty("Hour",hour);
         json.addProperty("Value",x);
         System.out.println(json);
         // String message = gson.toJson(json);
-        i=i+1;
-        System.out.println("envoie :"+i);
+        i[0]=i[0]+1;
+        System.out.println("envoie :"+i[0]);
 
         out.println(json);
         out.flush();
