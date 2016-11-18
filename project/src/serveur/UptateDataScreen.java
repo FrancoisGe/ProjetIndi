@@ -18,7 +18,7 @@ public class UptateDataScreen implements Runnable {
 
     public UptateDataScreen (Statement state){
         this.state =state;
-        f = new File("C:\\ProjetIndividuel\\src\\serveur\\mydata.txt") ;
+        f = new File("C:\\ProjetIndividuel\\src\\serveur\\project\\mydata.txt") ;
     }
     @Override
     public void run() {
@@ -44,7 +44,7 @@ public class UptateDataScreen implements Runnable {
 
             }
 
-            Process proc=Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe  C:\\ProjetIndividuel\\src\\serveur\\mapage.html");
+            Process proc=Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe  C:\\ProjetIndividuel\\src\\serveur\\project\\mapage.html");
 
 
 
