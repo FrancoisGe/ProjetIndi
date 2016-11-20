@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
  */
 public class creationData {
 
-    public JsonObject creationData(){
+    public JsonObject creationData(int valeur){
         JsonObject json=new JsonObject() ;
 
 

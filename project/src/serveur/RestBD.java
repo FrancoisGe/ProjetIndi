@@ -21,7 +21,7 @@ public class RestBD {
 
             Statement state = conn.createStatement();
 
-            File f = new File("C:\\ProjetIndividuel\\src\\serveur\\mydata.txt");
+
             String sql = "DELETE FROM Box1;";
 
             state.executeUpdate(sql);

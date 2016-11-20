@@ -45,7 +45,8 @@ public class Reception implements Runnable{
 
 
                  sql = "INSERT INTO Box1 (Date,Valeur) " +
-                       "VALUES ("+json.get("Hour")+","+json.get("Value")+ "  );";
+                       "VALUES ("+json.get("Heure")+","+json.get("Valeur")+ "  );";
+                System.out.println(sql);
                 state.executeUpdate(sql);
 
             } catch (IOException e) {

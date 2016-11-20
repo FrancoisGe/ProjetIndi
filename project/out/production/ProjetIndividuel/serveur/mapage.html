@@ -37,8 +37,8 @@ d3.tsv("mydate.tsv", function(d) {
 }, function(error, data) {
   if (error) throw error;
 
-  x.domain(data.map(function(d) { return d.letter; }));
-  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+  x.domain(data.map(function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function(d) { return d.valeur; })]);
 
   g.append("g")
       .attr("class", "axis axis--x")
@@ -59,10 +59,10 @@ d3.tsv("mydate.tsv", function(d) {
     .data(data)
     .enter().append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return x(d.letter); })
-      .attr("y", function(d) { return y(d.frequency); })
+      .attr("x", function(d) { return x(d.date); })
+      .attr("y", function(d) { return y(d.valeur); })
       .attr("width", x.bandwidth())
-      .attr("height", function(d) { return height - y(d.frequency); });
+      .attr("height", function(d) { return height - y(d.valeur); });
 });
 
 </script>

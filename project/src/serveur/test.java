@@ -4,12 +4,20 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
+import java.sql.Date;
+import java.util.*;
+
 /**
  * Created by François on 13-11-16.
  */
 public class test {
+    public static void main(String[] zero) {
+        java.util.Date date = new java.util.Date();
+        //date.setTime(1000000);
+        System.out.println("voici le test :" + date.getHours());
+        System.out.println("voici le test :" + date);
 
-
+    }
 
 
 

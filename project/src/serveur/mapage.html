@@ -62,7 +62,8 @@ d3.tsv("mydate.tsv", function(d) {
       .attr("x", function(d) { return x(d.letter); })
       .attr("y", function(d) { return y(d.frequency); })
       .attr("width", x.bandwidth())
-      .attr("height", function(d) { return height - y(d.frequency); });
+      .attr("height", function(d) { return height - y(d.frequency); })
+	  .attr("fill",red);
 });
 
 </script>

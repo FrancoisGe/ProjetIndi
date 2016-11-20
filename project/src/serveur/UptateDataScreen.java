@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 
 /**
  * Created by User on 15-11-16.
@@ -13,6 +14,7 @@ import java.sql.Statement;
 public class UptateDataScreen implements Runnable {
     private Statement state;
     private File f;
+    private Date date;
 
 
 
@@ -35,17 +37,20 @@ public class UptateDataScreen implements Runnable {
                 ResultSet rs = state.executeQuery("SELECT * FROM Box1;");
 
                 FileWriter fw = new FileWriter(f);
-                int date;
-                int value;
-                fw.write("Date\tValeur\n");
+                int d;
+                int valeur;
+                fw.write("date\tvaleur\n");
+
 
 
 
                 while (rs.next()) {
-                    date = rs.getInt("Date");
-                    value = rs.getInt("Valeur");
+                    d = rs.getInt("Date");
+                    valeur = rs.getInt("Valeur");
+                    date = new Date(d);
 
-                    fw.write(date + "\t" + value + "\r\n");
+
+                    fw.write(date.getHours() + "\t" + valeur + "\r\n");
                 }
 
 

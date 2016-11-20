@@ -37,7 +37,7 @@ public class OpenNewPhidget {
         });
 
 
-       ik.addSensorChangeListener(new SensorChangeListenerOp(out,ik,i));
+       ik.addSensorChangeListener(new SensorChangeListenerOp(out,i));
         ik.open(numPhidget);
         Date date =new Date();
         System.out.println(date);
