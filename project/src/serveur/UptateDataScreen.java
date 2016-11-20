@@ -18,7 +18,7 @@ public class UptateDataScreen implements Runnable {
 
     public UptateDataScreen (Statement state){
         this.state =state;
-        f = new File("C:\\ProjetIndividuel\\src\\serveur\\project\\mydata.txt") ;
+        f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\mydate.tsv") ;
     }
     @Override
     public void run() {
@@ -28,24 +28,31 @@ public class UptateDataScreen implements Runnable {
 
 
         try {
+            Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe  C:\\ProjetIndividuel\\project\\src\\serveur\\mapage.html");
+            // Attention seul firefox permet l'utilisation du fichier data.tsv
+            while (true) {
 
-            ResultSet rs = state.executeQuery( "SELECT * FROM Box1;" );
+                ResultSet rs = state.executeQuery("SELECT * FROM Box1;");
 
-            FileWriter fw =new FileWriter(f);
-            int date;
-            int value;
-
-            while (rs.next()){
-                date =rs.getInt("Date");
-                value=rs.getInt("Valeur");
-
-                fw.write("Date : "+ date+"  "+"Valeur : "+value+"\r\n");
+                FileWriter fw = new FileWriter(f);
+                int date;
+                int value;
+                fw.write("Date\tValeur\n");
 
 
+
+                while (rs.next()) {
+                    date = rs.getInt("Date");
+                    value = rs.getInt("Valeur");
+
+                    fw.write(date + "\t" + value + "\r\n");
+                }
+
+
+
+                fw.close();
+                Thread.sleep(500);
             }
-
-            Process proc=Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe  C:\\ProjetIndividuel\\src\\serveur\\project\\mapage.html");
-
 
 
 
@@ -53,6 +60,8 @@ public class UptateDataScreen implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
