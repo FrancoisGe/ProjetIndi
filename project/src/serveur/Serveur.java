@@ -40,7 +40,7 @@ public class Serveur {
 
             Class.forName("org.sqlite.JDBC");
             System.out.println("Driver O.K.");
-            conn = DriverManager.getConnection("jdbc:sqlite:BaseDeDonnees.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\ProjetIndividuel\\project\\BaseDeDonnees.db");
             System.out.println("Opened database successfully");
 
 

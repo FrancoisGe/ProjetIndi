@@ -14,6 +14,7 @@ import java.util.Date;
 public class UptateDataScreen implements Runnable {
     private Statement state;
     private File f;
+    private File f2;
     private Date date;
 
 
@@ -21,6 +22,7 @@ public class UptateDataScreen implements Runnable {
     public UptateDataScreen (Statement state){
         this.state =state;
         f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\mydate.tsv") ;
+        f2 = new File("C:\\wamp64\\www\\data.csv") ;
     }
     @Override
     public void run() {
@@ -30,7 +32,7 @@ public class UptateDataScreen implements Runnable {
 
 
         try {
-            Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe  C:\\ProjetIndividuel\\project\\src\\serveur\\mapage.html");
+            Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe http://localhost/mapage2");
             // Attention seul firefox permet l'utilisation du fichier data.tsv
             while (true) {
 
@@ -56,7 +58,23 @@ public class UptateDataScreen implements Runnable {
 
 
                 fw.close();
-                Thread.sleep(500);
+
+                ResultSet rs2 = state.executeQuery("SELECT Ind,COUNT(Valeur) AS nb  FROM Box2 GROUP BY Ind;");
+
+                FileWriter fw2 = new FileWriter(f2);
+                fw2.write("age,population\n");
+                while (rs2.next()) {
+                    fw2.write(rs2.getInt("Ind")+","+rs2.getInt("nb")+"\n");
+                }
+                System.out.println("je viens d ecrire");
+                fw2.close();
+
+                Thread.sleep(10000);
+
+
+
+
+
             }
 
 

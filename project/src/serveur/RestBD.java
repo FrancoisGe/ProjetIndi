@@ -22,7 +22,7 @@ public class RestBD {
             Statement state = conn.createStatement();
 
 
-            String sql = "DELETE FROM Box1;";
+            String sql = "DELETE FROM Box2;";
 
             state.executeUpdate(sql);
         } catch (ClassNotFoundException e) {
