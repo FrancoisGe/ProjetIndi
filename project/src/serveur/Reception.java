@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,12 +21,14 @@ public class Reception implements Runnable{
     int[] i;
     Statement state;
     String sql;
+    int numBoite;
 
-    public Reception(BufferedReader in, int[] i,Statement state){
+    public Reception(BufferedReader in, int[] i,Statement state,int numBoite){
         parser = new JsonParser();
         this.in = in;
         this.i = i;
         this.state=state;
+        this.numBoite=numBoite;
     }
 
 
@@ -35,9 +38,14 @@ public class Reception implements Runnable{
         while(true){
             try {
                 message = in.readLine();
-                if (message.equals("salut")){
+                if (message.equals("erreur "+numBoite)){
                     System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
-                    
+                    File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html") ;
+                    FileWriter fw = new FileWriter(f);
+                    fw.write("Il y aun problème a la boite "+numBoite);
+                    fw.close();
+                    Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
+
                 }
                 else {
                     JsonObject json = parser.parse(message).getAsJsonObject();

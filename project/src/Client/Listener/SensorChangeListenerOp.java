@@ -55,8 +55,7 @@ public class SensorChangeListenerOp implements SensorChangeListener {
             out.println(json);
             out.flush();
 
-            out.println("salut");
-            out.flush();
+
         }
     }
 }

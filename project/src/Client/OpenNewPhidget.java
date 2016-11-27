@@ -38,7 +38,7 @@ public class OpenNewPhidget {
 
 
        ik.addSensorChangeListener(new SensorChangeListenerOp(out,i));
-        ik.open(numPhidget);
+        ik.openAny();
         Date date =new Date();
         System.out.println(date);
         System.out.println("waiting for InterfaceKit attachment...");
