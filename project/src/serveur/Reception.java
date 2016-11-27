@@ -42,7 +42,7 @@ public class Reception implements Runnable{
                     System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
                     File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html") ;
                     FileWriter fw = new FileWriter(f);
-                    fw.write("Il y aun problème a la boite "+numBoite);
+                    fw.write("Il y a un problème a la boite "+numBoite);
                     fw.close();
                     Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
 

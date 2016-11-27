@@ -29,11 +29,11 @@ public class Reception implements Runnable {
                 int m = Integer.parseInt(message);//Recoit le nombre de packet deja recu par le serveur, on va utiliser un objet pour parler entre les 2 thread
                 System.out.println("reception : "+ m);
                 i[0]=i[0]-m;
-                out.println("erreur 0");
-                out.flush();
+
+
                 if(i[0]>10){
                     System.out.println("il y a un problème");
-                    out.println("erreur 0");
+                    out.println("erreur 1");
                     out.flush();
                 }
 

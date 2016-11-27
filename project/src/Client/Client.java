@@ -29,7 +29,7 @@ public class Client {
 
 
         try{
-            socket = new Socket(InetAddress.getLocalHost(),2000);
+            socket = new Socket(InetAddress.getLocalHost(),2001);
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
