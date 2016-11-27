@@ -1,11 +1,10 @@
 package serveur;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
+import java.util.ResourceBundle;
 
 /**
  * Created by François on 13-11-16.
@@ -27,6 +26,14 @@ public class test {
             System.out.println(sql);
             Statement state = conn.createStatement();
             state.executeUpdate(sql);
+
+
+            File f2 = new File("C:\\wamp\\www\\data.csv") ;//fichier data pour mapage3
+
+
+            ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
+            String driver = rb.getString("sgbd.driver");
+            System.out.print(driver);
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

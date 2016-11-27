@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -34,20 +35,26 @@ public class Reception implements Runnable{
         while(true){
             try {
                 message = in.readLine();
-                JsonObject json = parser.parse(message).getAsJsonObject();
+                if (message.equals("salut")){
+                    System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
+                    
+                }
+                else {
+                    JsonObject json = parser.parse(message).getAsJsonObject();
 
 
-                System.out.println(message);
+                    System.out.println(message);
 
 
-                i[0]=i[0]+1;
-                System.out.println(i[0]);
+                    i[0] = i[0] + 1;
+                    System.out.println(i[0]);// !!!!!!!
 
 
-                 sql = "INSERT INTO Box2 (Valeur,Date,Ind) " +
-                       "VALUES ("+json.get("Valeur")+","+ json.get("Heure")+","+json.get("Index")+");";
-                System.out.println(sql);
-                state.executeUpdate(sql);
+                    sql = "INSERT INTO Box2 (Valeur,Date,Ind) " +
+                            "VALUES (" + json.get("Valeur") + "," + json.get("Heure") + "," + json.get("Index") + ");";
+                    System.out.println(sql);
+                    state.executeUpdate(sql);
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();

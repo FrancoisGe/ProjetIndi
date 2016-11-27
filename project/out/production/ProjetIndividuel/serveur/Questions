@@ -10,19 +10,31 @@ ou
 Apache
 
 
+A faire !!!!!!!!!!!
+
+- utiliser semaphore pour eviter l'exception sql
 
 
-utiliser semaphore
+
+- idee :
+
+    demander si on a aimer l'èvènement avec smiley
+
+    utiliser le cercle + graph du nombre de click
 
 
-idee
+- modifier fct qui structure les données dans le fichier
 
-demander si on a aimer l'èvènement avec smiley
-
-utiliser le cercle + graph du nombre de click
+- faire graphe qui compare plusieurs valeur
 
 
-Doc client c est la personne qui deploit le serveur
 
-Le programmeur c est celui qui pourra modifier ton code donc le comprendre
+- info
+    Doc client c est la personne qui deploit le serveur
+
+    Le programmeur c est celui qui pourra modifier ton code donc le comprendre
+
+
+
+
 

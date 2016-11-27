@@ -34,7 +34,7 @@ public class SensorChangeListenerOp implements SensorChangeListener {
         int valeur = sensorChangeEvent.getValue();
 
         Date date = new Date();
-        long heure =   date.getTime();
+        long heure =   date.getHours();
 
 
 
@@ -53,6 +53,9 @@ public class SensorChangeListenerOp implements SensorChangeListener {
             System.out.println("envoie :" + i[0]);
 
             out.println(json);
+            out.flush();
+
+            out.println("salut");
             out.flush();
         }
     }

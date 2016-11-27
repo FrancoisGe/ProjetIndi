@@ -37,7 +37,7 @@ public class Client {
 
 
             Thread envoie = new Thread(new Envoie(out,i));
-            Thread reception =new Thread(new Reception(in,i));
+            Thread reception =new Thread(new Reception(in,i,out));
             envoie.start();
             reception.start();
 
