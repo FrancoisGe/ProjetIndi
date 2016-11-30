@@ -44,7 +44,7 @@ public class ServeurPrincipale {
             serveur1.wait();
           //  serveur2.wait();
             //screen.wait();
-            System.out.println("Problemme !!!!!!!!!!!!!!!!!!!!!!!!!");
+
 
 
 

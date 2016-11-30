@@ -27,7 +27,7 @@ public class UptateDataScreen implements Runnable {
         this.state =state;
         ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
         //String nf1 = rb.getString("nf1");
-        String nf2 = rb.getString("nf2")+numBoite;
+        String nf2 = rb.getString("nf2");
        // f = new File(nf1) ;
 
 
