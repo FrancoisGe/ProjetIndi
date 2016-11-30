@@ -25,21 +25,26 @@ public class Serveur implements Runnable{
 
     int[] checkReception = {0};//Est utilisé pour vérifie le nombre de message envoyé au serveur moins le nombres de message que le serveur a recu
 
-
+    Connection connection;
     Statement statement;
 
 
-    public Serveur(int numBoite,Statement statement){
+    public Serveur(int numBoite,Connection c){
         this.numBoite=numBoite;
         try {
             socketserver = new ServerSocket(2000+numBoite);
             socket = socketserver.accept();
+
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
 
-            this.statement = statement;
+            this.connection= c;
+            this.statement = connection.createStatement();
+
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -50,6 +55,8 @@ public class Serveur implements Runnable{
 
         Thread reception = new Thread(new Reception(in,checkReception,statement,numBoite));
         Thread envoie = new Thread(new Envoie(out,checkReception));
+        Thread screen = new Thread(new UptateDataScreen(connection,numBoite));
+        screen.start();
 
         reception.start();
         envoie.start();
@@ -58,9 +65,12 @@ public class Serveur implements Runnable{
         try {
             reception.wait();
             envoie.wait();
+            screen.wait();
+
 
 
             socket.close();
+
 
 
         } catch (InterruptedException e) {

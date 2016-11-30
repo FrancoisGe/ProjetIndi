@@ -14,9 +14,11 @@ public class test {
         java.util.Date date = new java.util.Date();
         //date.setTime(1000000);
         System.out.println("voici le test :" + date.getHours());
-        System.out.println("voici le test :" + date);
-        try {
-            Class.forName("org.sqlite.JDBC");
+        System.out.println("voici le jour"+ date.getDay());
+        System.out.println(date.getDate());
+
+
+           /* Class.forName("org.sqlite.JDBC");
             System.out.println("Driver O.K.");
             Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\ProjetIndividuel\\project\\BaseDeDonnees.db");
             System.out.println("Opened database successfully");
@@ -25,7 +27,8 @@ public class test {
                     "VALUES (" + 1200 + "," + 12 + "," + 14 + ");";
             System.out.println(sql);
             Statement state = conn.createStatement();
-            state.executeUpdate(sql);
+            state.executeUpdate(sql);*/
+            System.out.println(date.getDay());
 
 
             File f2 = new File("C:\\wamp\\www\\data.csv") ;//fichier data pour mapage3
@@ -35,11 +38,6 @@ public class test {
             String driver = rb.getString("sgbd.driver");
             System.out.print(driver);
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
 
         try {

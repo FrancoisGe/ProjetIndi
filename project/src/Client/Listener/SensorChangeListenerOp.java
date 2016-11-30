@@ -35,6 +35,7 @@ public class SensorChangeListenerOp implements SensorChangeListener {
 
         Date date = new Date();
         long heure =   date.getHours();
+        int jour = date.getDay();
 
 
 
@@ -46,6 +47,7 @@ public class SensorChangeListenerOp implements SensorChangeListener {
             json.addProperty("Heure", heure);
             json.addProperty("Valeur", valeur);
             json.addProperty("Index", index);
+            json.addProperty("Jour",jour);
 
             System.out.println(json);
 
