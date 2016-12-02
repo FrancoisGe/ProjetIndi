@@ -1,12 +1,9 @@
 package Client;
-import Client.Listener.AttachListenerCo;
-import Client.Listener.SensorChangeListenerOp;
+import Client.Listener.SensorChangeListenerButton;
 import com.phidgets.*;
 import com.phidgets.event.*;
 
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.Date;
 
 /**
@@ -19,7 +16,7 @@ public class OpenNewPhidget {
 
 
 
-    public static InterfaceKitPhidget initIK(int numPhidget, PrintWriter out,int[] i) throws Exception {
+    public static InterfaceKitPhidget initIK( PrintWriter out,int[] i,SensorChangeListener s) throws Exception {
         InterfaceKitPhidget ik = new InterfaceKitPhidget();
 
         System.out.println(Phidget.getLibraryVersion());
@@ -37,13 +34,15 @@ public class OpenNewPhidget {
         });
 
 
-       ik.addSensorChangeListener(new SensorChangeListenerOp(out,i));
+       ik.addSensorChangeListener(s);
         ik.openAny();
         Date date =new Date();
         System.out.println(date);
         System.out.println("waiting for InterfaceKit attachment...");
         ik.waitForAttachment();
         System.out.println(ik.getDeviceName());
+        ik.setSensorChangeTrigger(0,2);
+        System.out.print("fini");
 
 
 

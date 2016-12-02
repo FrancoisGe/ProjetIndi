@@ -1,0 +1,72 @@
+package Client;
+
+import com.google.gson.JsonObject;
+import com.phidgets.InterfaceKitPhidget;
+import com.phidgets.PhidgetException;
+import com.phidgets.event.SensorChangeListener;
+
+import java.io.PrintWriter;
+import java.util.Date;
+
+/**
+ * Created by User on 02-12-16.
+ */
+public class EnvoieTemp implements Runnable{
+
+    private PrintWriter out;
+    private InterfaceKitPhidget ik;
+    private SensorChangeListener s;
+
+
+    private int[] i;
+
+    public EnvoieTemp(PrintWriter out,int[] i,SensorChangeListener s){
+        this.out = out;
+        this.i =i;
+        this.s =s;
+
+    }
+
+    @Override
+    public void run() {
+        try {
+            ik=OpenNewPhidget.initIK(out,i,s);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        while (true) {
+            try {
+                Date date = new Date();
+                int seconde = date.getSeconds();
+                int minute = date.getMinutes();
+                int heure = date.getHours();
+                int jour = date.getDay();
+                double valeur = (ik.getSensorValue(0)*0.2222)-61.111;
+
+                JsonObject json = new JsonObject();
+                json.addProperty("Heure", heure);
+                json.addProperty("Minute",minute);
+                json.addProperty("Seconde",seconde);
+                json.addProperty("Valeur", valeur);
+                json.addProperty("Jour",jour);
+
+                System.out.println(json);
+
+                i[0] = i[0] + 1;
+                System.out.println("envoie :" + i[0]);
+
+                out.println(json);
+                out.flush();
+
+
+
+                Thread.sleep(10000);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (PhidgetException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}

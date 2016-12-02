@@ -1,9 +1,11 @@
 package Client;
 
+import Client.Listener.SensorChangeListenerButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.phidgets.InterfaceKitPhidget;
 import com.phidgets.PhidgetException;
+import com.phidgets.event.SensorChangeListener;
 
 import java.io.PrintWriter;
 import java.util.Date;
@@ -15,30 +17,27 @@ public class Envoie implements Runnable{
 
     private  PrintWriter out;
     private InterfaceKitPhidget ik;
+    private SensorChangeListener s;
 
     private int[] i;
 
-    public Envoie(PrintWriter out,int[] i){
+    public Envoie(PrintWriter out,int[] i,SensorChangeListener s){
         this.out = out;
         this.i =i;
+        this.s=s;
     }
 
     @Override
     public void run() {
         try {
-           ik= OpenNewPhidget.initIK(317446,out,i);
+            OpenNewPhidget.initIK(out,i,s);
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         int x=0;
-       // while (true){
 
-
-
-
-       // }
     }
 
 

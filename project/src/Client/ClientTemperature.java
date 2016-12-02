@@ -1,24 +1,22 @@
 package Client;
 
-import com.phidgets.PhidgetException;
-
+import Client.Listener.SensorChangeListenerButton;
+import Client.Listener.SensorChangeListenerTemperature;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Created by François on 29-10-16.
+ * Created by User on 02-12-16.
  */
-public class Client {
-
+public class ClientTemperature {
     public static void main(String[] zero) throws IOException {
 
-        ServerSocket socketserver;
+
         Socket socket = new Socket();
 
         PrintWriter out = null;
@@ -34,14 +32,17 @@ public class Client {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
+            SensorChangeListenerTemperature s =new SensorChangeListenerTemperature(out,i);
 
 
-            Thread envoie = new Thread(new Envoie(out,i));
+           // Thread envoie = new Thread(new Envoie(out,i,s));
+            Thread envoieTemp = new Thread(new EnvoieTemp(out,i,s));
             Thread reception =new Thread(new Reception(in,i,out));
-            envoie.start();
+           // envoie.start();
             reception.start();
+            envoieTemp.start();
 
-            envoie.wait();
+          //  envoie.wait();
             reception.wait();
 
             socket.close();
