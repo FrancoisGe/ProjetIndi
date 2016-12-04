@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<meta http-equiv="refresh" content="10">
 <style>
 
 .axis--x path {
@@ -23,7 +24,7 @@ var svg = d3.select("svg"),
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var parseTime = d3.timeParse("%S-%M-%H-%A");
+var parseTime = d3.timeParse("%S-%M-%H-%j");
 
 var x = d3.scaleTime()
     .rangeRound([0, width]);
@@ -35,7 +36,7 @@ var line = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.close); });
 
-d3.tsv("data.tsv", function(d) {
+d3.tsv("data1.tsv", function(d) {
   d.date = parseTime(d.date);
   d.close = +d.close;
   return d;
