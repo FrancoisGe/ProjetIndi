@@ -1,20 +1,18 @@
-package serveur;
+package serveur.Bouton;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
  * Created by User on 15-11-16.
  */
-public class UptateDataScreen implements Runnable {
+public class UptateDataScreenButton implements Runnable {
     private Statement state;
     private File f;
     private File f2;
@@ -26,8 +24,7 @@ public class UptateDataScreen implements Runnable {
 
 
 
-    public UptateDataScreen (Connection c,int numBoite){
-        this.state =state;
+    public UptateDataScreenButton(Connection c, int numBoite){
         ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
         String nf1 = rb.getString("nf1");
         String nf2 = rb.getString("nf2")+numBoite+".csv";
@@ -66,7 +63,7 @@ public class UptateDataScreen implements Runnable {
 
                 FileWriter fw = new FileWriter(f);
 
-                fw.write("age,population\n");
+                fw.write("bouton,click\n");
 
 
 
@@ -76,7 +73,7 @@ public class UptateDataScreen implements Runnable {
 
 
 
-                    fw.write("Boutton "+rs.getInt("Ind") + "," + rs.getInt("nb") + "\r\n");
+                    fw.write("Bouton "+rs.getInt("Ind") + "," + rs.getInt("nb") + "\r\n");
                 }
 
 
@@ -85,13 +82,13 @@ public class UptateDataScreen implements Runnable {
 
                 //Structure données mapage3
                 ResultSet rs3 = state.executeQuery("SELECT  Ind FROM Boite"+numBoite+" GROUP BY Ind ORDER BY Ind ASC;");
-                int tabBoutton[]=new int[8];
+                int tabBouton[]=new int[8];
                 int lgTab=0;
                 FileWriter fw2 = new FileWriter(f2);
                 fw2.write("State");
                 while (rs3.next()){
-                    tabBoutton[lgTab]=rs3.getInt("Ind");
-                    fw2.write(",bouton "+tabBoutton[lgTab]);
+                    tabBouton[lgTab]=rs3.getInt("Ind");
+                    fw2.write(",bouton "+ tabBouton[lgTab]);
                     lgTab++;
                 }
 
@@ -112,7 +109,7 @@ public class UptateDataScreen implements Runnable {
 
                     if ((heure == derniereHeure)&&(jour==derniereJour)) {
                         id = rs2.getInt("Ind");
-                        while ((i<=lgTab)&&(id !=tabBoutton[i])){
+                        while ((i<=lgTab)&&(id != tabBouton[i])){
                             fw2.write(",0");
                             i++;
                         }
@@ -131,7 +128,7 @@ public class UptateDataScreen implements Runnable {
                         fw2.write(ConvertirIntJour(jour)+" : "+heure + "h");
 
                         id = rs2.getInt("Ind");
-                        while ((i<lgTab)&&(id !=tabBoutton[i])){
+                        while ((i<lgTab)&&(id != tabBouton[i])){
                             fw2.write(",0");
                             i++;
                         }
@@ -178,7 +175,7 @@ public class UptateDataScreen implements Runnable {
     }
 
 
-    public String ConvertirIntJour(int jour){
+    public static String ConvertirIntJour(int jour){
         switch (jour) {
             case 1:
                 return "Lundi";

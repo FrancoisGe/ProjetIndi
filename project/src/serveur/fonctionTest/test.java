@@ -10,11 +10,13 @@ import com.phidgets.event.*;
  */
 public class test {
     public static void main(String[] zero) {
-        java.util.Date date = new java.util.Date();
+        /*java.util.Date date = new java.util.Date();
         //date.setTime(1000000);
         System.out.println("voici le test :" + date.getHours());
         System.out.println("voici le jour"+ date.getDay());
-        System.out.println(date.getDate());
+        date.setMonth(0);
+        System.out.println(date);*/
+
 
 
 
@@ -46,7 +48,7 @@ public class test {
                 e1.printStackTrace();
         }
         //Runtime.getRuntime().ex*/
-       /* try{
+       try{
         InterfaceKitPhidget ik = new InterfaceKitPhidget();
 
         System.out.println(Phidget.getLibraryVersion());
@@ -78,8 +80,9 @@ public class test {
             System.out.println("waiting for InterfaceKit attachment...");
             ik.waitForAttachment();
             System.out.println(ik.getDeviceName());
-            for (int i = 0; i < 100; i++) {
-                double x = ik.getSensorValue(0)*0.2222-61.111;
+            ik.setOutputState(0,true);
+            for (int i = 0; i < 8; i++) {
+                double x = ik.getSensorValue(0);
 
                 System.out.println("test : "+x);
                 Thread.sleep(1000);
@@ -89,10 +92,19 @@ public class test {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
+        System.out.println(jourAnnee(3,1));
 
     }
+    public static int jourAnnee(int j,int m){
+        if(m==0){return j;}
+        if(m==1){return j+31;}
+        if (m==2){return 31+28+j;}
+        if (m % 2 ==0){return jourAnnee(j,m-1)+30;}
+        else{return jourAnnee(j,m-1)+31;}
 
+
+    }
 
 
 

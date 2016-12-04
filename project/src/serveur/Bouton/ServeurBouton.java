@@ -1,4 +1,6 @@
-package serveur;
+package serveur.Bouton;
+
+import serveur.Envoie;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.sql.Statement;
 /**
  * Created by François on 27-11-16.
  */
-public class Serveur implements Runnable{
+public class ServeurBouton implements Runnable{
 
     ServerSocket socketserver;
     Socket socket = new Socket();
@@ -29,7 +31,7 @@ public class Serveur implements Runnable{
     Statement statement;
 
 
-    public Serveur(int numBoite,Connection c){
+    public ServeurBouton(int numBoite, Connection c){
         this.numBoite=numBoite;
         try {
             socketserver = new ServerSocket(2000+numBoite);
@@ -53,9 +55,9 @@ public class Serveur implements Runnable{
     @Override
     public void run() {
 
-        Thread reception = new Thread(new Reception(in,checkReception,statement,numBoite));
+        Thread reception = new Thread(new ReceptionBouton(in,checkReception,statement,numBoite));
         Thread envoie = new Thread(new Envoie(out,checkReception));
-        Thread screen = new Thread(new UptateDataScreen(connection,numBoite));
+        Thread screen = new Thread(new UptateDataScreenButton(connection,numBoite));
         screen.start();
 
         reception.start();

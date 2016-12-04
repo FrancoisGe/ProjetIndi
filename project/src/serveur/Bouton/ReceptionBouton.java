@@ -1,4 +1,4 @@
-package serveur;
+package serveur.Bouton;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -13,7 +13,7 @@ import java.sql.Statement;
 /**
  * Created by François on 29-10-16.
  */
-public class Reception implements Runnable{
+public class ReceptionBouton implements Runnable{
     private String message;//Contient le dernier message recu
     private BufferedReader in;
     JsonParser parser;
@@ -23,7 +23,7 @@ public class Reception implements Runnable{
     String sql;
     int numBoite;
 
-    public Reception(BufferedReader in, int[] i,Statement state,int numBoite){
+    public ReceptionBouton(BufferedReader in, int[] i, Statement state, int numBoite){
         parser = new JsonParser();
         this.in = in;
         this.i = i;

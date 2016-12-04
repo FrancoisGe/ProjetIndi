@@ -32,8 +32,8 @@ public class ClientTemperature {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
-            SensorChangeListenerTemperature s =new SensorChangeListenerTemperature(out,i);
 
+            SensorChangeListenerTemperature s =new SensorChangeListenerTemperature(out,i);
 
            // Thread envoie = new Thread(new Envoie(out,i,s));
             Thread envoieTemp = new Thread(new EnvoieTemp(out,i,s));

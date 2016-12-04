@@ -1,16 +1,11 @@
 package serveur;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
+import serveur.Bouton.ServeurBouton;
+import serveur.Temperature.ServeurTemp;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Scanner;
 
 /**
  * Created by François on 29-10-16.
@@ -36,8 +31,8 @@ public class ServeurPrincipale {
 
 
 
-            Thread serveur1 = new Thread(new Serveur(1,connection));
-           // Thread serveur2 = new Thread(new Serveur(2,statement));
+            Thread serveur1 = new Thread(new ServeurTemp(1,connection));
+           // Thread serveur2 = new Thread(new ServeurBouton(2,statement));
             serveur1.start();
          //   serveur2.start();
 

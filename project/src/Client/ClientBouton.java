@@ -15,7 +15,7 @@ import java.net.Socket;
 /**
  * Created by François on 29-10-16.
  */
-public class ClientBoutton {
+public class ClientBouton {
 
     public static void main(String[] zero) throws IOException {
 
