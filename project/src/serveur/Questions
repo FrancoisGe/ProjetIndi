@@ -1,18 +1,9 @@
-Peut on utiliser le type date dans la librairie javasript ?
-
-Probleme comment insérer les données dans le java script ?
-
-
-Telecharger la lib d3 + cahnger souce dans le code dans le meme repertoire
-
-ou
-
 Apache
 
 
 A faire !!!!!!!!!!!
 
-- utiliser semaphore pour eviter l'exception sql
+
 
 
 
@@ -23,7 +14,7 @@ A faire !!!!!!!!!!!
     utiliser le cercle + graph du nombre de click
 
 
-- modifier fct qui structure les données dans le fichier
+
 
 - faire graphe qui compare plusieurs valeur
 
@@ -35,10 +26,10 @@ A faire !!!!!!!!!!!
     Le programmeur c est celui qui pourra modifier ton code donc le comprendre
 
 
-faire test si la BD tien un grand nombre de valeur donc faire script qui inject bcp de données
+faire test si la BD tien un grand nombre de valeur donc faire script qui inject bcp de données  OK
 
 
-faire une boite avec capteur température en temps réel mettre des led qui affiche les modif
+faire une boite avec capteur température en temps réel mettre des led qui affiche les modif  OK
 
 
 faire une boite avec un slicer pour choisir le capteur et mettre 2 capteur genre force
@@ -51,6 +42,12 @@ Axe des x nombre de personne a fait la valeur de l axe y
 
 tester le déploiment sur 2 ordi
 
+
+
+Demander un deuxième interFaceKIt pour pouvoir tester 2 machines qui se connectent au serveur
+
+
+Est ce que je devrait faire un projet pour chaque composant (Serveur ,ClientBoutton ,...)
 
 
 

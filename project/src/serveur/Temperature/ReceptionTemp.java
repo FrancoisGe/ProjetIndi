@@ -22,6 +22,7 @@ public class ReceptionTemp implements Runnable{
     Statement state;
     String sql;
     int numBoite;
+    boolean t;
 
     public ReceptionTemp(BufferedReader in, int[] i, Statement state, int numBoite){
         parser = new JsonParser();
@@ -29,13 +30,14 @@ public class ReceptionTemp implements Runnable{
         this.i = i;
         this.state=state;
         this.numBoite=numBoite;
+        this.t=true;
     }
 
 
 
     public void run(){
 
-        while(true){
+        while(true && t){
             try {
                 message = in.readLine();
                 if (message.equals("erreur "+numBoite)){
@@ -65,6 +67,7 @@ public class ReceptionTemp implements Runnable{
                 }
 
             } catch (IOException e) {
+                t=false;
                 e.printStackTrace();
             } catch (SQLException e) {
                 e.printStackTrace();

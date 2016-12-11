@@ -13,16 +13,18 @@ public class Reception implements Runnable {
     private BufferedReader in;
     private int[] i;
     PrintWriter out;
+    boolean t;
 
     public Reception(BufferedReader in,int[] i,PrintWriter out){
         this.in =in;
         this.i=i;
         this.out =out;
+        t=true;
     }
 
     @Override
     public void run() {
-        while (true){
+        while (true && t){
             try {
 
                 String message = in.readLine();
@@ -31,16 +33,21 @@ public class Reception implements Runnable {
                 i[0]=i[0]-m;
 
 
-                if(i[0]>10){
+                if(i[0]>1000){
                     System.out.println("il y a un problème");
                     out.println("erreur 1");
                     out.flush();
                 }
 
             } catch (IOException e) {
+                t=false;
                 e.printStackTrace();
+
             }
+
         }
+
+
 
     }
 }

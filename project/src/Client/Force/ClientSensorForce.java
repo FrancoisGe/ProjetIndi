@@ -3,8 +3,10 @@ package Client.Force;
 import Client.Bouton.Envoie;
 import Client.Listener.SensorChangeListenerButton;
 import Client.Listener.SensorChangeListenerForce;
+import Client.Listener.SensorChangeListenerTemperature;
 import Client.Reception;
 import com.phidgets.PhidgetException;
+import com.phidgets.event.SensorChangeListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,7 +40,7 @@ public class ClientSensorForce {
             SensorChangeListenerForce s =new SensorChangeListenerForce(out,i);
 
 
-            Envoie env = new Envoie(out,i,s);
+            EnvoieForce env = new EnvoieForce(out,i,s);
             Thread envoie = new Thread(env);
             Thread reception =new Thread(new Reception(in,i,out));
             envoie.start();

@@ -1,6 +1,5 @@
 package Client.Bouton;
 
-import Client.Envoie;
 import Client.Listener.SensorChangeListenerButton;
 import Client.Reception;
 import com.phidgets.PhidgetException;
@@ -13,7 +12,6 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 
 import java.net.Socket;
-import java.net.SocketException;
 
 /**
  * Created by François on 29-10-16.

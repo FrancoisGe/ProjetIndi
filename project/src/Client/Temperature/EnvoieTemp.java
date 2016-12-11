@@ -1,13 +1,11 @@
 package Client.Temperature;
 
-import Client.LedTemp;
+import Client.LedAffichage;
 import Client.Listener.SensorChangeListenerTemperature;
 import Client.OpenNewPhidget;
 import com.google.gson.JsonObject;
 import com.phidgets.InterfaceKitPhidget;
 import com.phidgets.PhidgetException;
-import com.phidgets.event.SensorChangeEvent;
-import com.phidgets.event.SensorChangeListener;
 
 import java.io.PrintWriter;
 import java.util.Date;
@@ -43,7 +41,7 @@ public class EnvoieTemp implements Runnable{
             try {
                 ik = OpenNewPhidget.initIK(out, i, s);
 
-                Thread led = new Thread(new LedTemp(ik));
+                Thread led = new Thread(new LedAffichage(ik,400,5));
                 led.start();
 
                 while (true) {

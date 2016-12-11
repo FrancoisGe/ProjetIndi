@@ -1,7 +1,5 @@
 package Client.Temperature;
 
-import Client.EnvoieTemp;
-import Client.Listener.SensorChangeListenerButton;
 import Client.Listener.SensorChangeListenerTemperature;
 import Client.Reception;
 import com.phidgets.PhidgetException;

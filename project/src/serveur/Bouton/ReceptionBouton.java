@@ -22,6 +22,7 @@ public class ReceptionBouton implements Runnable{
     Statement state;
     String sql;
     int numBoite;
+    boolean t;
 
     public ReceptionBouton(BufferedReader in, int[] i, Statement state, int numBoite){
         parser = new JsonParser();
@@ -29,13 +30,14 @@ public class ReceptionBouton implements Runnable{
         this.i = i;
         this.state=state;
         this.numBoite=numBoite;
+        this.t =true;
     }
 
 
 
     public void run(){
 
-        while(true){
+        while(true && t){
             try {
                 message = in.readLine();
                 if (message.equals("erreur "+numBoite)){
@@ -58,13 +60,14 @@ public class ReceptionBouton implements Runnable{
                     System.out.println(i[0]);// !!!!!!!
 
 
-                    sql = "INSERT INTO Boite"+numBoite+ "(Valeur,Jour,Ind,Heure) " +
+                    sql = "INSERT INTO BoiteForce1 (Valeur,Jour,Ind,Heure) " +
                             "VALUES (" + json.get("Valeur") + "," + json.get("Jour") + "," + json.get("Index") + ","+json.get("Heure")+");";
                     System.out.println(sql);
                     state.executeUpdate(sql);
                 }
 
             } catch (IOException e) {
+                t=false;
                 e.printStackTrace();
            } catch (SQLException e) {
                 e.printStackTrace();

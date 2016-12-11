@@ -65,9 +65,11 @@ public class ServeurBouton implements Runnable{
 
 
         try {
-            reception.wait();
-            envoie.wait();
-            screen.wait();
+            while (reception.isAlive()){
+
+            }
+            envoie.stop();
+            screen.stop();
 
 
 
@@ -75,9 +77,7 @@ public class ServeurBouton implements Runnable{
 
 
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         }
 

@@ -1,5 +1,6 @@
 package serveur.Temperature;
 
+import jdk.nashorn.internal.ir.WhileNode;
 import serveur.Bouton.ReceptionBouton;
 import serveur.Bouton.UptateDataScreenButton;
 import serveur.Envoie;
@@ -67,9 +68,13 @@ public class ServeurTemp implements Runnable{
 
 
         try {
-            reception.wait();
-            envoie.wait();
-            screen.wait();
+            while (reception.isAlive()) {
+            }
+
+
+            envoie.stop();
+            screen.stop();
+
 
 
 
@@ -77,8 +82,7 @@ public class ServeurTemp implements Runnable{
 
 
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

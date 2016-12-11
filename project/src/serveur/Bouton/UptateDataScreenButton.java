@@ -27,7 +27,7 @@ public class UptateDataScreenButton implements Runnable {
     public UptateDataScreenButton(Connection c, int numBoite){
         ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
         String nf1 = rb.getString("nf1");
-        String nf2 = rb.getString("nf2")+numBoite+".csv";
+        String nf2 = rb.getString("nf2")+"1.csv";
         f = new File(nf1) ;
         page=rb.getString("page1");
         page2=rb.getString("page2");
@@ -59,26 +59,7 @@ public class UptateDataScreenButton implements Runnable {
             while (true) {
 
 
-                ResultSet rs = state.executeQuery("SELECT Ind ,COUNT(Valeur) AS nb FROM Boite1 GROUP BY Ind;");
 
-                FileWriter fw = new FileWriter(f);
-
-                fw.write("bouton,click\n");
-
-
-
-
-                while (rs.next()) {
-
-
-
-
-                    fw.write("Bouton "+rs.getInt("Ind") + "," + rs.getInt("nb") + "\r\n");
-                }
-
-
-                rs.close();
-                fw.close();
 
                 //Structure données mapage3
                 ResultSet rs3 = state.executeQuery("SELECT  Ind FROM Boite"+numBoite+" GROUP BY Ind ORDER BY Ind ASC;");

@@ -28,7 +28,8 @@ public class UptateDataScreenTemp implements Runnable {
     public UptateDataScreenTemp(Connection c, int numBoite) {
         ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
 
-        String nf1 = "C:\\wamp\\www\\data1.tsv";
+       // String nf1 = "C:\\wamp\\www\\data1.tsv";
+        String nf1 = rb.getString("nft1");
         f = new File(nf1);
        page = rb.getString("pageTemp1");
 
