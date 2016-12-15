@@ -91,7 +91,7 @@ public class UptateDataScreenTemp implements Runnable {
     public static int jourAnnee(int j,int m){
         if(m==0){return j;}
         if(m==1){return j+31;}
-        if (m==2){return 31+28+j;}
+        if (m==2){return 31+29+j;}
         if (m % 2 ==0){return jourAnnee(j,m-1)+30;}
         else{return jourAnnee(j,m-1)+31;}
 

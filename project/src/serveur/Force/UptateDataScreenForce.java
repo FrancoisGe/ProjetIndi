@@ -28,8 +28,8 @@ public class UptateDataScreenForce implements Runnable {
         // String nf1 = "C:\\wamp\\www\\data1.tsv";
         String nf1 = rb.getString("nff1");
         f = new File(nf1);
-        System.out.println(nf1+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        page = rb.getString("pageTemp1");
+
+        page = rb.getString("pageForce1");
 
 
         this.numBoite = numBoite;
@@ -94,7 +94,7 @@ public class UptateDataScreenForce implements Runnable {
             return j + 31;
         }
         if (m == 2) {
-            return 31 + 28 + j;
+            return 31 + 29 + j;
         }
         if (m % 2 == 0) {
             return jourAnnee(j, m - 1) + 30;

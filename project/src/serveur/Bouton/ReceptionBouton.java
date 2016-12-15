@@ -36,8 +36,9 @@ public class ReceptionBouton implements Runnable{
 
 
     public void run(){
+        boolean pasErreur=true;
 
-        while(true && t){
+        while(pasErreur){
             try {
                 message = in.readLine();
                 if (message.equals("erreur "+numBoite)){
@@ -47,9 +48,11 @@ public class ReceptionBouton implements Runnable{
                     fw.write("Il y a un problème a la boite "+numBoite);
                     fw.close();
                     Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
-
+                    pasErreur=false;
                 }
                 else {
+
+                    pasErreur=true;
                     JsonObject json = parser.parse(message).getAsJsonObject();
 
 
@@ -60,7 +63,7 @@ public class ReceptionBouton implements Runnable{
                     System.out.println(i[0]);// !!!!!!!
 
 
-                    sql = "INSERT INTO BoiteForce1 (Valeur,Jour,Ind,Heure) " +
+                    sql = "INSERT INTO Boite"+numBoite+" (Valeur,Jour,Ind,Heure) " +
                             "VALUES (" + json.get("Valeur") + "," + json.get("Jour") + "," + json.get("Index") + ","+json.get("Heure")+");";
                     System.out.println(sql);
                     state.executeUpdate(sql);

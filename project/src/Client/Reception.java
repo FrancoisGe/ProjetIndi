@@ -13,18 +13,18 @@ public class Reception implements Runnable {
     private BufferedReader in;
     private int[] i;
     PrintWriter out;
-    boolean t;
+    boolean isRun;
 
     public Reception(BufferedReader in,int[] i,PrintWriter out){
         this.in =in;
         this.i=i;
         this.out =out;
-        t=true;
+        isRun=true;
     }
 
     @Override
     public void run() {
-        while (true && t){
+        while ( isRun){
             try {
 
                 String message = in.readLine();
@@ -40,14 +40,18 @@ public class Reception implements Runnable {
                 }
 
             } catch (IOException e) {
-                t=false;
+                isRun=false;
                 e.printStackTrace();
 
             }
+
 
         }
 
 
 
+    }
+    public void stopRun(){
+        isRun=false;
     }
 }

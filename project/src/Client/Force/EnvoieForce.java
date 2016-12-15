@@ -18,6 +18,7 @@ public class EnvoieForce implements Runnable{
     private PrintWriter out;
     private InterfaceKitPhidget ik;
     private SensorChangeListenerForce s;
+    private boolean isRun=true;
 
 
 
@@ -44,7 +45,7 @@ public class EnvoieForce implements Runnable{
             Thread led = new Thread(new LedAffichage(ik,100,100));
             led.start();
 
-            while (true) {
+            while (isRun) {
 
                 Date date = new Date();
                 int seconde = date.getSeconds();
@@ -88,5 +89,9 @@ public class EnvoieForce implements Runnable{
     }
     public InterfaceKitPhidget getIk(){
         return ik;
+    }
+
+    public void stopRun(){
+        isRun=false;
     }
 }

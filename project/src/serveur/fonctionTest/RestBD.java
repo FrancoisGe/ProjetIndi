@@ -15,14 +15,14 @@ public class RestBD {
         try {
             Class.forName("org.sqlite.JDBC");
             System.out.println("Driver O.K.");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:BaseDeDonnees.db");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\ProjetIndividuel2\\INFOB318-16-17-pds\\project\\BaseDeDonnees.db");
             System.out.println("Opened database successfully");
 
 
             Statement state = conn.createStatement();
 
 
-            String sql = "DELETE FROM BoiteForce1;";
+            String sql = "DELETE FROM BoiteTemp1;";
 
             state.executeUpdate(sql);
         } catch (ClassNotFoundException e) {

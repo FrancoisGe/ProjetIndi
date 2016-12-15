@@ -34,29 +34,39 @@ public class ServeurTemp implements Runnable{
     Statement statement;
 
 
-    public ServeurTemp(int numBoite, Connection c){
-        this.numBoite=numBoite;
-        try {
-            socketserver = new ServerSocket(2000+numBoite);
-            socket = socketserver.accept();
-
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream());
-
-
-            this.connection= c;
-            this.statement = connection.createStatement();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public ServeurTemp(int numBoite, Connection c,BufferedReader in,PrintWriter out){
+        /*int x=0;
+        for (int i = 0; i < nbBoite.length; i++) {
+            x=nbBoite[i]+x;
         }
+        x=x-nbBoite[1];//on retire le nombre de boite de son type*/
 
+        this.numBoite=numBoite;
+        this.connection= c;
+        this.in =in;
+        this.out=out;
     }
 
     @Override
     public void run() {
+
+        try {
+            //socketserver = new ServerSocket(2000+numBoite);
+
+           // socket = socketserver.accept();
+
+            //in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            //out = new PrintWriter(socket.getOutputStream());
+
+
+
+            this.statement = connection.createStatement();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        //test
 
         Thread reception = new Thread(new ReceptionTemp(in,checkReception,statement,numBoite));
         Thread envoie = new Thread(new Envoie(out,checkReception));
@@ -69,6 +79,7 @@ public class ServeurTemp implements Runnable{
 
         try {
             while (reception.isAlive()) {
+                Thread.sleep(50);
             }
 
 
@@ -84,6 +95,8 @@ public class ServeurTemp implements Runnable{
 
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 

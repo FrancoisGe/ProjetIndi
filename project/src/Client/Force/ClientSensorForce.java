@@ -5,6 +5,7 @@ import Client.Listener.SensorChangeListenerButton;
 import Client.Listener.SensorChangeListenerForce;
 import Client.Listener.SensorChangeListenerTemperature;
 import Client.Reception;
+import com.google.gson.JsonObject;
 import com.phidgets.PhidgetException;
 import com.phidgets.event.SensorChangeListener;
 
@@ -27,15 +28,43 @@ public class ClientSensorForce {
         PrintWriter out = null;
         BufferedReader in = null;
 
+        int numType=2;
+        int numBoite=1;//utiliser un fichier de propriété
+
         int i[] = {0};
+
+        int j =-1;
+        boolean noSocket=true;
+
+
+        while ((j<10)&&noSocket){
+            try {
+
+
+                j++;
+                socket = new Socket("192.168.0.6", 2000 + j);//utiliser un fichier de propriété pour l IP
+
+                noSocket = false;
+
+            }catch (IOException e){
+
+            }
+        }
 
 
 
         try{
-            socket = new Socket(InetAddress.getLocalHost(),2002);
+            socket = new Socket(InetAddress.getLocalHost(),2001);
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
+
+            JsonObject json = new JsonObject();
+            json.addProperty("numType", numType);
+            json.addProperty("numBoite", numBoite);
+
+            out.println(json);
+            out.flush();
 
             SensorChangeListenerForce s =new SensorChangeListenerForce(out,i);
 
@@ -48,7 +77,7 @@ public class ClientSensorForce {
 
 
             while(reception.isAlive()){
-
+                Thread.sleep(50);
             }
 
             env.getIk().close();
@@ -70,8 +99,12 @@ public class ClientSensorForce {
 
         } catch (PhidgetException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
 
     }
+
+
 }

@@ -36,20 +36,24 @@ public class ReceptionTemp implements Runnable{
 
 
     public void run(){
+        boolean pasErreur=true;
 
-        while(true && t){
+        while(pasErreur){
             try {
                 message = in.readLine();
-                if (message.equals("erreur "+numBoite)){
+                if ((message.equals("erreur "+numBoite))&&t){
                     System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
                     File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html") ;
                     FileWriter fw = new FileWriter(f);
                     fw.write("Il y a un problème a la boite "+numBoite);
                     fw.close();
                     Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
-
+                    pasErreur=false;
+                    Thread.sleep(10000);
                 }
                 else {
+                    pasErreur=true;
+
                     JsonObject json = parser.parse(message).getAsJsonObject();
 
 
@@ -70,6 +74,8 @@ public class ReceptionTemp implements Runnable{
                 t=false;
                 e.printStackTrace();
             } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

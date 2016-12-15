@@ -18,6 +18,7 @@ public class EnvoieTemp implements Runnable{
     private PrintWriter out;
     private InterfaceKitPhidget ik;
     private SensorChangeListenerTemperature s;
+    private boolean isRun = true;
 
 
 
@@ -44,7 +45,7 @@ public class EnvoieTemp implements Runnable{
                 Thread led = new Thread(new LedAffichage(ik,400,5));
                 led.start();
 
-                while (true) {
+                while (isRun) {
 
                     Date date = new Date();
                     int seconde = date.getSeconds();
@@ -87,5 +88,9 @@ public class EnvoieTemp implements Runnable{
     }
     public InterfaceKitPhidget getIk(){
         return ik;
+    }
+
+    public void stopRun(){
+        isRun=false;
     }
 }

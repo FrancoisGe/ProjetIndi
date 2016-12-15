@@ -11,6 +11,7 @@ public class LedAffichage implements Runnable{
     private InterfaceKitPhidget ik;
     private int min;
     private int dif;
+    private boolean isRun;
 
     public LedAffichage(InterfaceKitPhidget ik, int min, int dif){
         this.ik =ik;
@@ -19,7 +20,7 @@ public class LedAffichage implements Runnable{
     }
     @Override
     public void run() {
-        while (true) {
+        while (isRun) {
             try {
 
 
@@ -55,5 +56,8 @@ public class LedAffichage implements Runnable{
             }
         }
 
+    }
+    public void stopRun(){
+        isRun=false;
     }
 }

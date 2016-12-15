@@ -2,6 +2,7 @@ package Client.Temperature;
 
 import Client.Listener.SensorChangeListenerTemperature;
 import Client.Reception;
+import com.google.gson.JsonObject;
 import com.phidgets.PhidgetException;
 
 import java.io.BufferedReader;
@@ -18,20 +19,49 @@ public class ClientTemperature {
     public static void main(String[] args) throws IOException {
 
 
-        Socket socket = new Socket();
+        Socket socket = null;
 
         PrintWriter out = null;
         BufferedReader in = null;
 
+        int numType=1;
+        int numBoite=1;//utiliser un fichier de propriété
+
+
+
         int i[] = {0};
 
+        int j =-1;
+        boolean noSocket=true;
+
+        while ((j<10)&&noSocket){
+           try {
+
+
+               j++;
+               socket = new Socket("192.168.0.6", 2000 + j);//utiliser un fichier de propriété pour l IP
+
+               noSocket = false;
+
+           }catch (IOException e){
+
+           }
+        }
 
 
         try{
-            socket = new Socket(InetAddress.getLocalHost(),2001);
+
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
+
+            JsonObject json = new JsonObject();
+            json.addProperty("numType", numType);
+            json.addProperty("numBoite", numBoite);
+
+            out.println(json);
+            out.flush();
+
 
 
             SensorChangeListenerTemperature s =new SensorChangeListenerTemperature(out,i);
@@ -40,27 +70,29 @@ public class ClientTemperature {
            // Thread envoie = new Thread(new Envoie(out,i,s));
             Thread envoieTemp = new Thread(env);
             Thread reception =new Thread(new Reception(in,i,out));
-           // envoie.start();
+
             reception.start();
             envoieTemp.start();
 
-          //  envoie.wait();
-            reception.wait();
+
 
             while(reception.isAlive()){
+                Thread.sleep(50);
 
             }
 
+
             env.getIk().close();
+            env.stopRun();
             socket.close();
 
 
 
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        }  catch (PhidgetException e) {
             e.printStackTrace();
-        } catch (PhidgetException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 

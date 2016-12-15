@@ -32,16 +32,30 @@ public class ServeurBouton implements Runnable{
 
 
     public ServeurBouton(int numBoite, Connection c){
+        /*int x=0;
+        for (int i = 0; i < nbBoite.length; i++) {
+            x=nbBoite[i]+x;
+        }
+        x=x-nbBoite[2];//on retire le nombre de boite de son type*/
         this.numBoite=numBoite;
+        this.connection= c;
+
+
+    }
+
+    @Override
+    public void run() {
         try {
+
             socketserver = new ServerSocket(2000+numBoite);
+
             socket = socketserver.accept();
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
 
-            this.connection= c;
+
             this.statement = connection.createStatement();
 
         } catch (IOException e) {
@@ -50,10 +64,6 @@ public class ServeurBouton implements Runnable{
             e.printStackTrace();
         }
 
-    }
-
-    @Override
-    public void run() {
 
         Thread reception = new Thread(new ReceptionBouton(in,checkReception,statement,numBoite));
         Thread envoie = new Thread(new Envoie(out,checkReception));

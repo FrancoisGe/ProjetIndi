@@ -20,6 +20,7 @@ public class Envoie implements Runnable{
     private InterfaceKitPhidget ik;
     private SensorChangeListener s;
 
+
     private int[] i;
 
     public Envoie(PrintWriter out,int[] i,SensorChangeListener s){
@@ -37,7 +38,9 @@ public class Envoie implements Runnable{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        int x=0;
+
+
+
 
 
 
@@ -45,6 +48,7 @@ public class Envoie implements Runnable{
     public InterfaceKitPhidget getIk(){
         return this.ik;
     }
+
 
 
 

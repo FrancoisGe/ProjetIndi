@@ -25,7 +25,7 @@ public class SensorChangeListenerForce implements SensorChangeListener {
         this.i=i;
     }
     @Override
-    public void sensorChanged(SensorChangeEvent sensorChangeEvent) {/*
+    public void sensorChanged(SensorChangeEvent sensorChangeEvent) {
 
 
 
@@ -84,5 +84,5 @@ public class SensorChangeListenerForce implements SensorChangeListener {
 
 
 
-   */}
+   }
 }
