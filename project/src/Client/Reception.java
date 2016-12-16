@@ -41,12 +41,14 @@ public class Reception implements Runnable {
 
             } catch (IOException e) {
                 isRun=false;
+
                 e.printStackTrace();
 
             }
 
 
         }
+        System.out.println("reception est fini");
 
 
 

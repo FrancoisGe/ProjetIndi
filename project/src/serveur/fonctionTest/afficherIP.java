@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
  * Created by User on 02-12-16.
  */
 public class afficherIP {
-    public static void main(String[] zero) {
+    public static void main(String[] args) {
 
         InetAddress LocaleAdresse ;
         InetAddress ServeurAdresse;

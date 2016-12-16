@@ -16,13 +16,14 @@ import java.sql.Statement;
 public class ReceptionBouton implements Runnable{
     private String message;//Contient le dernier message recu
     private BufferedReader in;
-    JsonParser parser;
+    private JsonParser parser;
 
-    int[] i;
-    Statement state;
-    String sql;
-    int numBoite;
-    boolean t;
+    private int[] i;
+    private Statement state;
+    private String sql;
+    private int numBoite;
+    private boolean pasErreur;
+    private boolean isRun;
 
     public ReceptionBouton(BufferedReader in, int[] i, Statement state, int numBoite){
         parser = new JsonParser();
@@ -30,25 +31,28 @@ public class ReceptionBouton implements Runnable{
         this.i = i;
         this.state=state;
         this.numBoite=numBoite;
-        this.t =true;
+        this.pasErreur =true;
+        this.isRun =true;
     }
 
 
 
     public void run(){
-        boolean pasErreur=true;
 
-        while(pasErreur){
+
+        while(isRun){
             try {
                 message = in.readLine();
-                if (message.equals("erreur "+numBoite)){
-                    System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
-                    File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html") ;
-                    FileWriter fw = new FileWriter(f);
-                    fw.write("Il y a un problème a la boite "+numBoite);
-                    fw.close();
-                    Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
-                    pasErreur=false;
+                if (message.equals("erreur "+numBoite)) {
+                    if (pasErreur){
+                        System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
+                        File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
+                        FileWriter fw = new FileWriter(f);
+                        fw.write("Il y a un problème a la boite " + numBoite);
+                        fw.close();
+                        Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
+                        pasErreur = false;
+                    }
                 }
                 else {
 
@@ -63,18 +67,21 @@ public class ReceptionBouton implements Runnable{
                     System.out.println(i[0]);// !!!!!!!
 
 
-                    sql = "INSERT INTO Boite"+numBoite+" (Valeur,Jour,Ind,Heure) " +
+                    sql = "INSERT INTO BoiteBouton"+numBoite+" (Valeur,Jour,Ind,Heure) " +
                             "VALUES (" + json.get("Valeur") + "," + json.get("Jour") + "," + json.get("Index") + ","+json.get("Heure")+");";
                     System.out.println(sql);
                     state.executeUpdate(sql);
                 }
 
             } catch (IOException e) {
-                t=false;
+                isRun=false;
                 e.printStackTrace();
            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+    }
+    public void stopRun(){
+        isRun=false;
     }
 }

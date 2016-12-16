@@ -67,7 +67,7 @@ Et documenter la partie que j ai modifier
 
 Probleme 100% processeur
 
-
+-----------------------------------------------------------
 Faire test avec rasbery pendant 1 j
 
 
@@ -84,3 +84,9 @@ Dans le thread créer une fct qui met le boolean du threat a false
 
 Envoyer un mail a M Englebert pour demander pour les tests !!!!!!!!!!!!!!!!!!!!
 
+Modifier le num des fichier de data avec numBoite
+
+-------------------------------------------------
+
+probleme si pas de phidget connecté
+ thread infi

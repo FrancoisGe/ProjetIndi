@@ -34,7 +34,7 @@ public class ClientTemperature {
         int j =-1;
         boolean noSocket=true;
 
-        while ((j<10)&&noSocket){
+        while ((j<100)&&noSocket){
            try {
 
 
@@ -42,6 +42,7 @@ public class ClientTemperature {
                socket = new Socket("192.168.0.6", 2000 + j);//utiliser un fichier de propriété pour l IP
 
                noSocket = false;
+               System.out.println(socket);
 
            }catch (IOException e){
 
@@ -82,7 +83,13 @@ public class ClientTemperature {
             }
 
 
-            env.getIk().close();
+            try {
+                env.getIk().close();
+            } catch (PhidgetException e) {
+                e.printStackTrace();
+            }
+
+
             env.stopRun();
             socket.close();
 
@@ -90,9 +97,7 @@ public class ClientTemperature {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }  catch (PhidgetException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        }   catch (InterruptedException e) {
             e.printStackTrace();
         }
 

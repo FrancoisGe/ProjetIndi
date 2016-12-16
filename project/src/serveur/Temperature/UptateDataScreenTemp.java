@@ -18,11 +18,12 @@ import serveur.Convertion;
 public class UptateDataScreenTemp implements Runnable {
     private Statement state;
     private File f;
-    private File f2;
+
     private Connection connection;
     private String page;
     private int numBoite;
-    String page2;
+
+    private boolean isRun=true;
 
 
     public UptateDataScreenTemp(Connection c, int numBoite) {
@@ -54,10 +55,10 @@ public class UptateDataScreenTemp implements Runnable {
 
         try {
             Process proc = Runtime.getRuntime().exec(page);
-            while (true) {
+            while (isRun) {
 
 
-                ResultSet rs = state.executeQuery("SELECT Valeur ,Mois,Jour,Heure,Minute,Seconde FROM BoiteTemp1;");
+                ResultSet rs = state.executeQuery("SELECT Valeur ,Mois,Jour,Heure,Minute,Seconde FROM BoiteTemp"+numBoite+";");
                // ResultSet rs = state.executeQuery("SELECT Valeur ,Heure,Minute,Seconde FROM BoiteTemp1;");
 
                 FileWriter fw = new FileWriter(f);
@@ -96,5 +97,8 @@ public class UptateDataScreenTemp implements Runnable {
         else{return jourAnnee(j,m-1)+31;}
 
 
+    }
+    public void stopRun(){
+        isRun=false;
     }
 }

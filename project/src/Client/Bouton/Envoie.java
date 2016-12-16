@@ -21,6 +21,7 @@ public class Envoie implements Runnable{
     private SensorChangeListener s;
 
 
+
     private int[] i;
 
     public Envoie(PrintWriter out,int[] i,SensorChangeListener s){
@@ -43,6 +44,7 @@ public class Envoie implements Runnable{
 
 
 
+        System.out.println("envoie est fini");
 
     }
     public InterfaceKitPhidget getIk(){

@@ -37,7 +37,7 @@ public class ClientSensorForce {
         boolean noSocket=true;
 
 
-        while ((j<10)&&noSocket){
+        while ((j<100)&&noSocket){
             try {
 
 
@@ -54,7 +54,7 @@ public class ClientSensorForce {
 
 
         try{
-            socket = new Socket(InetAddress.getLocalHost(),2001);
+
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
@@ -80,13 +80,17 @@ public class ClientSensorForce {
                 Thread.sleep(50);
             }
 
-            env.getIk().close();
+            try {
+                env.getIk().close();
+            } catch (PhidgetException e) {
+                e.printStackTrace();
+            }
 
 
 
             socket.close();
 
-
+            System.out.println("la socket est close");
 
 
 
@@ -97,9 +101,7 @@ public class ClientSensorForce {
         catch (IOException e) {
             e.printStackTrace();
 
-        } catch (PhidgetException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        }  catch (InterruptedException e) {
             e.printStackTrace();
         }
 

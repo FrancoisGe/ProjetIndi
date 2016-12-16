@@ -10,6 +10,7 @@ public class Envoie implements Runnable{
     private int[] i;
     private PrintWriter out;
     private int send ;
+    private boolean isRun=true;
 
     public Envoie(PrintWriter out,int[] i){
         this.i=i;
@@ -18,7 +19,7 @@ public class Envoie implements Runnable{
     }
     @Override
     public void run() {
-        while (true) {
+        while (isRun) {
 
 
 
@@ -35,4 +36,9 @@ public class Envoie implements Runnable{
             }
         }
     }
+    public void stopRun(){
+        isRun=false;
+    }
+
+
 }

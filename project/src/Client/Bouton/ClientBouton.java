@@ -36,7 +36,7 @@ public class ClientBouton {
         int j =-1;
         boolean noSocket=true;
 
-        while ((j<10)&&noSocket){
+        while ((j<100)&&noSocket){
             try {
 
 
@@ -78,29 +78,34 @@ public class ClientBouton {
                 Thread.sleep(50);
 
             }
-
-            env.getIk().close();
-
-
-
             socket.close();
 
 
+            if (env.getIk()==(null)){
+                System.out.println("ok");
+            }
+            else {
+                env.getIk().close();
+            }
 
 
 
 
 
-        }
 
-        catch (IOException e) {
+
+
+
+        } catch (IOException e) {
             e.printStackTrace();
 
-        } catch (PhidgetException e) {
-            e.printStackTrace();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (PhidgetException e) {
+            e.printStackTrace();
         }
+
 
 
     }

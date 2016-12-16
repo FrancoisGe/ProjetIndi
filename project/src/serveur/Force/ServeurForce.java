@@ -1,5 +1,6 @@
 package serveur.Force;
 
+import Client.Force.EnvoieForce;
 import serveur.Bouton.ReceptionBouton;
 import serveur.Bouton.UptateDataScreenButton;
 import serveur.Envoie;
@@ -19,7 +20,7 @@ import java.sql.Statement;
  */
 public class ServeurForce implements Runnable {
 
-    ServerSocket socketserver;
+
     Socket socket = new Socket();
 
     PrintWriter out = null;
@@ -33,14 +34,12 @@ public class ServeurForce implements Runnable {
     Statement statement;
 
 
-    public ServeurForce(int numBoite, Connection c) {
-        /*int x=0;
-        for (int i = 0; i < nbBoite.length; i++) {
-            x=nbBoite[i]+x;
-        }
-        x=x-nbBoite[2];//on retire le nombre de boite de son type*/
+    public ServeurForce(int numBoite, Connection c,BufferedReader in,PrintWriter out) {
+
         this.numBoite = numBoite;
         this.connection = c;
+        this.in=in;
+        this.out=out;
 
 
 
@@ -48,47 +47,62 @@ public class ServeurForce implements Runnable {
 
     @Override
     public void run() {
-        try {
+
+            try {
+                statement = connection.createStatement();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                String sql = "CREATE TABLE BoiteForce"+numBoite+"("+
+                "Valeur	INTEGER NOT NULL,"+
+                "Jour	INTEGER NOT NULL,"+
+                "Heure	INTEGER NOT NULL,"+
+                "Minute	INTEGER NOT NULL,"+
+                "Mois	INTEGER NOT NULL,"+
+                "Seconde	INTEGER NOT NULL);";
+
+                System.out.println(sql);
+
+                statement.executeUpdate(sql);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
 
-            socketserver = new ServerSocket(2000 + numBoite);
-
-            socket = socketserver.accept();
-
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream());
 
 
 
-            this.statement = connection.createStatement();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        Thread reception = new Thread(new ReceptionForce(in, checkReception, statement, numBoite));
-        Thread envoie = new Thread(new Envoie(out, checkReception));
-        Thread screen = new Thread(new UptateDataScreenForce(connection, numBoite));
+
+        ReceptionForce rec=new ReceptionForce(in,checkReception,statement,numBoite);
+        Thread reception = new Thread(rec);
+        Envoie env=new Envoie(out,checkReception);
+        Thread envoie = new Thread(env);
+        UptateDataScreenForce screenUp =new UptateDataScreenForce(connection,numBoite);
+        Thread screen = new Thread(screenUp);
+
         screen.start();
-
         reception.start();
         envoie.start();
 
 
         try {
             while (reception.isAlive()) {
+                Thread.sleep(50);
 
             }
-            envoie.stop();
-            screen.stop();
+            env.stopRun();
+            screenUp.stopRun();
 
 
             socket.close();
 
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 

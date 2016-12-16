@@ -15,19 +15,20 @@ import java.util.ResourceBundle;
 public class UptateDataScreenForce implements Runnable {
     private Statement state;
     private File f;
-    private File f2;
+
     private Connection connection;
     private String page;
     private int numBoite;
-    String page2;
+
+    private boolean isRun=true;
 
 
     public UptateDataScreenForce(Connection c, int numBoite) {
         ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
 
-        // String nf1 = "C:\\wamp\\www\\data1.tsv";
-        String nf1 = rb.getString("nff1");
-        f = new File(nf1);
+
+        String nff1 = rb.getString("nff1");
+        f = new File(nff1);
 
         page = rb.getString("pageForce1");
 
@@ -52,10 +53,10 @@ public class UptateDataScreenForce implements Runnable {
 
         try {
             Process proc = Runtime.getRuntime().exec(page);
-            while (true) {
+            while (isRun) {
 
 
-                ResultSet rs = state.executeQuery("SELECT Valeur ,Mois,Jour,Heure,Minute,Seconde FROM BoiteForce1;");
+                ResultSet rs = state.executeQuery("SELECT Valeur ,Mois,Jour,Heure,Minute,Seconde FROM BoiteForce"+numBoite+";");
                 // ResultSet rs = state.executeQuery("SELECT Valeur ,Heure,Minute,Seconde FROM BoiteTemp1;");
 
                 FileWriter fw = new FileWriter(f);
@@ -103,6 +104,9 @@ public class UptateDataScreenForce implements Runnable {
         }
 
 
+    }
+    public void stopRun(){
+        isRun=false;
     }
 
 }

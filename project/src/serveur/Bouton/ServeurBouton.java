@@ -1,6 +1,7 @@
 package serveur.Bouton;
 
 import serveur.Envoie;
+import serveur.Temperature.UptateDataScreenTemp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,8 +18,8 @@ import java.sql.Statement;
  */
 public class ServeurBouton implements Runnable{
 
-    ServerSocket socketserver;
-    Socket socket = new Socket();
+
+
 
     PrintWriter out = null;
     BufferedReader in = null;
@@ -31,43 +32,45 @@ public class ServeurBouton implements Runnable{
     Statement statement;
 
 
-    public ServeurBouton(int numBoite, Connection c){
-        /*int x=0;
-        for (int i = 0; i < nbBoite.length; i++) {
-            x=nbBoite[i]+x;
-        }
-        x=x-nbBoite[2];//on retire le nombre de boite de son type*/
+    public ServeurBouton(int numBoite, Connection c,BufferedReader in,PrintWriter out){
+
         this.numBoite=numBoite;
         this.connection= c;
+        this.in=in;
+        this.out=out;
 
 
     }
 
     @Override
     public void run() {
+
         try {
-
-            socketserver = new ServerSocket(2000+numBoite);
-
-            socket = socketserver.accept();
-
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream());
-
-
-
-            this.statement = connection.createStatement();
-
-        } catch (IOException e) {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
             e.printStackTrace();
+        }
+        try {
+            String sql = "CREATE TABLE BoiteBouton"+numBoite+" ("+
+            "Jour	INTEGER NOT NULL,"+
+            "Heure	INTEGER NOT NULL,"+
+            "Ind	INTEGER NOT NULL,"+
+            "Valeur	INTEGER NOT NULL);";
+
+            System.out.println(sql);
+
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
 
-        Thread reception = new Thread(new ReceptionBouton(in,checkReception,statement,numBoite));
-        Thread envoie = new Thread(new Envoie(out,checkReception));
-        Thread screen = new Thread(new UptateDataScreenButton(connection,numBoite));
+        ReceptionBouton rec=new ReceptionBouton(in,checkReception,statement,numBoite);
+        Thread reception = new Thread(rec);
+        Envoie env=new Envoie(out,checkReception);
+        Thread envoie = new Thread(env);
+        UptateDataScreenButton screenUp =new UptateDataScreenButton(connection,numBoite);
+        Thread screen = new Thread(screenUp);
         screen.start();
 
         reception.start();
@@ -76,18 +79,21 @@ public class ServeurBouton implements Runnable{
 
         try {
             while (reception.isAlive()){
+                Thread.sleep(50);
 
             }
-            envoie.stop();
-            screen.stop();
+
+            screenUp.stopRun();
+            env.stopRun();
 
 
 
-            socket.close();
 
 
 
-        }  catch (IOException e) {
+
+
+        }   catch (InterruptedException e) {
             e.printStackTrace();
         }
 

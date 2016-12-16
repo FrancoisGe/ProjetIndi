@@ -22,7 +22,12 @@ public class OpenNewPhidget {
 
         System.out.println(Phidget.getLibraryVersion());
 
+        ik.addAttachListener(new AttachListener() {
+            @Override
+            public void attached(AttachEvent attachEvent) {
 
+            }
+        });
         ik.addDetachListener(new DetachListener() {
             public void detached(DetachEvent ae) {
                 System.out.println("detachment of " + ae);
@@ -42,8 +47,10 @@ public class OpenNewPhidget {
         System.out.println("waiting for InterfaceKit attachment...");
         ik.waitForAttachment();
         System.out.println(ik.getDeviceName());
-        ik.setSensorChangeTrigger(0,2);
-        System.out.print("fini");
+
+
+
+
 
 
 

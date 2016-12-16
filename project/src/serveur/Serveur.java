@@ -27,17 +27,15 @@ public class Serveur implements Runnable {
     PrintWriter out = null;
     BufferedReader in = null;
 
-    int numBoite;
-
-
+    int numSocket;
 
     Connection connection;
-    Statement statement;
 
 
-    public Serveur(int numBoite, Connection c,int nbBoite[]) {
 
-        this.numBoite=numBoite;
+    public Serveur(int numSocket, Connection c) {
+
+        this.numSocket=numSocket;
         this.connection = c;
 
 
@@ -47,9 +45,7 @@ public class Serveur implements Runnable {
     @Override
     public void run() {
         try {
-            socketserver = new ServerSocket(2000+numBoite);
-
-
+            socketserver = new ServerSocket(2000+numSocket);
 
             socket = socketserver.accept();
             socketserver.close();
@@ -74,17 +70,20 @@ public class Serveur implements Runnable {
             try{
 
                 switch (typeBoite.getAsInt()){
-                    case 0: Thread t0=new Thread(new ServeurBouton(numBoite.getAsInt(),connection));
+                    case 0: Thread t0=new Thread(new ServeurBouton(numBoite.getAsInt(),connection,in,out));
                             t0.start();
                             while(t0.isAlive()){Thread.sleep(50);}
+                        socket.close();
                             break;
                     case 1: Thread t1=new Thread(new ServeurTemp(numBoite.getAsInt(),connection,in,out));
                             t1.start();
                             while(t1.isAlive()){Thread.sleep(50);}
+                            socket.close();
                             break;
-                    case 2: Thread t2=new Thread(new ServeurForce(numBoite.getAsInt(),connection));
+                    case 2: Thread t2=new Thread(new ServeurForce(numBoite.getAsInt(),connection,in,out));
                             t2.start();
                             while(t2.isAlive()){Thread.sleep(50);}
+                            socket.close();
                             break;
                     default:break;
 

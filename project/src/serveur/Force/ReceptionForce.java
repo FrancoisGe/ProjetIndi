@@ -23,6 +23,7 @@ public class ReceptionForce implements Runnable{
     String sql;
     int numBoite;
     boolean t;
+    private boolean isRun =true;
 
     public ReceptionForce (BufferedReader in, int[] i, Statement state, int numBoite){
         parser = new JsonParser();
@@ -38,17 +39,19 @@ public class ReceptionForce implements Runnable{
     public void run(){
         boolean pasErreur=true;
 
-        while(pasErreur){
+        while(isRun){
             try {
                 message = in.readLine();
                 if (message.equals("erreur "+numBoite)){
-                    System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
-                    File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html") ;
-                    FileWriter fw = new FileWriter(f);
-                    fw.write("Il y a un problème a la boite "+numBoite);
-                    fw.close();
-                    Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
-                    pasErreur=false;
+                    if(pasErreur) {
+                        System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
+                        File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
+                        FileWriter fw = new FileWriter(f);
+                        fw.write("Il y a un problème a la boite " + numBoite);
+                        fw.close();
+                        Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
+                        pasErreur = false;
+                    }
                 }
                 else {
                     pasErreur=true;
@@ -69,11 +72,14 @@ public class ReceptionForce implements Runnable{
                 }
 
             } catch (IOException e) {
-                t=false;
+                isRun=false;
                 e.printStackTrace();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+    }
+    public void stopRun(){
+        isRun=false;
     }
 }

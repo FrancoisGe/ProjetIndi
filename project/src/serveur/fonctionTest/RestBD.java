@@ -11,7 +11,7 @@ import java.sql.Statement;
  * Created by User on 16-11-16.
  */
 public class RestBD {
-    public static void main(String[] zero) {//Ajouter un fichier de configuration
+    public static void main(String[] args) {//Ajouter un fichier de configuration
         try {
             Class.forName("org.sqlite.JDBC");
             System.out.println("Driver O.K.");
@@ -22,7 +22,7 @@ public class RestBD {
             Statement state = conn.createStatement();
 
 
-            String sql = "DELETE FROM BoiteTemp1;";
+            String sql = "DELETE FROM BoiteForce1;";
 
             state.executeUpdate(sql);
         } catch (ClassNotFoundException e) {

@@ -10,7 +10,7 @@ import java.sql.Statement;
  */
 public class fullBD {
 
-public static void main(String[] zero) {//Ajouter un fichier de configuration
+public static void main(String[] args) {//Ajouter un fichier de configuration
     try {
         Class.forName("org.sqlite.JDBC");
         System.out.println("Driver O.K.");

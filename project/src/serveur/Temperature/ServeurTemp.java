@@ -35,36 +35,41 @@ public class ServeurTemp implements Runnable{
 
 
     public ServeurTemp(int numBoite, Connection c,BufferedReader in,PrintWriter out){
-        /*int x=0;
-        for (int i = 0; i < nbBoite.length; i++) {
-            x=nbBoite[i]+x;
-        }
-        x=x-nbBoite[1];//on retire le nombre de boite de son type*/
+
 
         this.numBoite=numBoite;
         this.connection= c;
         this.in =in;
         this.out=out;
+
+
+
     }
 
     @Override
     public void run() {
 
         try {
-            //socketserver = new ServerSocket(2000+numBoite);
-
-           // socket = socketserver.accept();
-
-            //in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            //out = new PrintWriter(socket.getOutputStream());
-
-
-
-            this.statement = connection.createStatement();
-
+            statement = connection.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        try {
+        String sql = "CREATE TABLE BoiteTemp"+numBoite+" ("+
+            "Valeur	REAL NOT NULL,"+
+            "Jour	INTEGER NOT NULL,"+
+            "Heure	INTEGER NOT NULL,"+
+            "Minute	INTEGER NOT NULL,"+
+            "Seconde	INTEGER NOT NULL,"+
+            "Mois	INTEGER NOT NULL);";
+
+            System.out.println(sql);
+
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
         //test
 
