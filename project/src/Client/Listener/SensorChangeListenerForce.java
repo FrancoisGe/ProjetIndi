@@ -16,13 +16,15 @@ public class SensorChangeListenerForce implements SensorChangeListener {
 
     private PrintWriter out ;
 
-    private int[] i;
+    private int[] max;
 
-    public SensorChangeListenerForce(PrintWriter out, int[] i){
+
+    public SensorChangeListenerForce(PrintWriter out, int[] max){
 
         this.out = out;
 
-        this.i=i;
+
+        this.max=max;
     }
     @Override
     public void sensorChanged(SensorChangeEvent sensorChangeEvent) {
@@ -35,44 +37,10 @@ public class SensorChangeListenerForce implements SensorChangeListener {
             if (sensorChangeEvent.getIndex() == 0) {
 
                 InterfaceKitPhidget ik = (InterfaceKitPhidget) sensorChangeEvent.getSource();
-                ik.setSensorChangeTrigger(0,100);
+
                 valeur = valeur + ik.getSensorValue(2)+  ik.getSensorValue(4) +ik.getSensorValue(6);
-
-
-                i[0] = i[0] + 1;
-                System.out.println("envoie :" + i[0]);
-                Date date = new Date();
-                int seconde = date.getSeconds();
-                int minute = date.getMinutes();
-                int heure = date.getHours();
-                int jour = date.getDate();
-                int mois =date.getMonth();
-
-
-
-
-
-
-
-
-
-
-                JsonObject json = new JsonObject();
-                json.addProperty("Heure", heure);
-                json.addProperty("Minute", minute);
-                json.addProperty("Seconde", seconde);
-                json.addProperty("Valeur", valeur);
-                json.addProperty("Jour", jour);
-                json.addProperty("Mois",mois);
-
-                System.out.println(json);
-
-                i[0] = i[0] + 1;
-                System.out.println("envoie :" + i[0]);
-
-                out.println(json);
-                out.flush();
-
+                System.out.println(valeur);
+                if (valeur>max[0]){max[0]=valeur;}
 
 
 

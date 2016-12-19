@@ -9,13 +9,14 @@ import com.phidgets.PhidgetException;
 public class LedAffichage implements Runnable{
 
     private InterfaceKitPhidget ik;
-    private int min;
+    private int min=1000;
     private int dif;
     private boolean isRun;
 
-    public LedAffichage(InterfaceKitPhidget ik, int min, int dif){
+
+    public LedAffichage(InterfaceKitPhidget ik, int dif){
         this.ik =ik;
-        this.min = min;
+
         this.dif = dif;
     }
     @Override
@@ -24,23 +25,28 @@ public class LedAffichage implements Runnable{
             try {
 
 
+
                 int val = ik.getSensorValue(0);
+                if(val<min){val=min;}
                 for (int j = 1; j < 6; j++) {
                     ik.setOutputState(j, false);
 
                 }
-                System.out.println(val);
-                ik.setOutputState(1, true);
+
+
                 if (val > min) {
-                    ik.setOutputState(2, true);
+                    ik.setOutputState(1, true);
                     if (val > min+dif) {
-                        ik.setOutputState(3, true);
+                        ik.setOutputState(2, true);
                         if (val > min+dif*2) {
-                            ik.setOutputState(4, true);
+                            ik.setOutputState(3, true);
                             if (val >min+dif*3) {
-                                ik.setOutputState(5, true);
+                                ik.setOutputState(4, true);
                                 if (val > min+dif*5) {
-                                    ik.setOutputState(6, true);
+                                    ik.setOutputState(5, true);
+                                    if (val>min+dif*6){
+                                        ik.setOutputState(6,true);
+                                    }
                                 }
 
                             }

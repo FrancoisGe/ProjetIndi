@@ -41,7 +41,7 @@ public class ClientBouton {
 
 
                 j++;
-                socket = new Socket("192.168.0.6", 2000 + j);//utiliser un fichier de propriété pour l IP
+                socket = new Socket("192.168.1.6", 2000 + j);//utiliser un fichier de propriété pour l IP
 
                 noSocket = false;
 

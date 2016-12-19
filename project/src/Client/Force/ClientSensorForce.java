@@ -32,6 +32,8 @@ public class ClientSensorForce {
         int numBoite=1;//utiliser un fichier de propriété
 
         int i[] = {0};
+        int max[]={0};
+        int maxAll=0;
 
         int j =-1;
         boolean noSocket=true;
@@ -42,7 +44,7 @@ public class ClientSensorForce {
 
 
                 j++;
-                socket = new Socket("192.168.0.6", 2000 + j);//utiliser un fichier de propriété pour l IP
+                socket = new Socket("192.168.1.6", 2000 + j);//utiliser un fichier de propriété pour l IP
 
                 noSocket = false;
 
@@ -66,10 +68,10 @@ public class ClientSensorForce {
             out.println(json);
             out.flush();
 
-            SensorChangeListenerForce s =new SensorChangeListenerForce(out,i);
+            SensorChangeListenerForce s =new SensorChangeListenerForce(out,max);
 
 
-            EnvoieForce env = new EnvoieForce(out,i,s);
+            EnvoieForce env = new EnvoieForce(out,i,s,max);
             Thread envoie = new Thread(env);
             Thread reception =new Thread(new Reception(in,i,out));
             envoie.start();
@@ -85,6 +87,7 @@ public class ClientSensorForce {
             } catch (PhidgetException e) {
                 e.printStackTrace();
             }
+            env.stopRun();
 
 
 

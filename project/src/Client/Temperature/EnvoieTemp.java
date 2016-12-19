@@ -43,7 +43,7 @@ public class EnvoieTemp implements Runnable{
                 ik = OpenNewPhidget.initIK(out, i, s);
                 ik.setSensorChangeTrigger(0,2);
 
-                Thread led = new Thread(new LedAffichage(ik,400,5));
+                Thread led = new Thread(new LedAffichage(ik,5));
                 led.start();
 
                 while (isRun) {

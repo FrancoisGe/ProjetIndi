@@ -19,15 +19,17 @@ public class EnvoieForce implements Runnable{
     private InterfaceKitPhidget ik;
     private SensorChangeListenerForce s;
     private boolean isRun=true;
+    private int[]max;
 
 
 
     private int[] i;
 
-    public EnvoieForce(PrintWriter out,int[] i,SensorChangeListenerForce s){
+    public EnvoieForce(PrintWriter out,int[] i,SensorChangeListenerForce s,int[] max){
         this.out = out;
         this.i =i;
         this.s=s;
+        this.max=max;
 
 
     }
@@ -42,10 +44,11 @@ public class EnvoieForce implements Runnable{
         try {
             ik = OpenNewPhidget.initIK(out, i, s);
 
-            Thread led = new Thread(new LedAffichage(ik,100,100));
+            Thread led = new Thread(new LedAffichage(ik,100));
             led.start();
 
             while (isRun) {
+
 
                 Date date = new Date();
                 int seconde = date.getSeconds();
@@ -53,8 +56,7 @@ public class EnvoieForce implements Runnable{
                 int heure = date.getHours();
                 int jour = date.getDate();
                 int mois = date.getMonth();
-                int valeur =ik.getSensorValue(0)+ik.getSensorValue(2)+ik.getSensorValue(4)+ik.getSensorValue(6);
-
+                int valeur =max[0];
 
 
                 JsonObject json = new JsonObject();
@@ -73,7 +75,7 @@ public class EnvoieForce implements Runnable{
                 out.println(json);
                 out.flush();
 
-
+                max[0]=0;
                 Thread.sleep(1000);
 
 

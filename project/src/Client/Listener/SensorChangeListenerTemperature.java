@@ -20,6 +20,7 @@ public class SensorChangeListenerTemperature implements SensorChangeListener{
     private int[] i;
 
 
+
     public SensorChangeListenerTemperature(PrintWriter out, int[] i){
 
         this.out = out;
