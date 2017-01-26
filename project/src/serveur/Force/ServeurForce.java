@@ -36,7 +36,7 @@ public class ServeurForce implements Runnable {
 
     public ServeurForce(int numBoite, Connection c,BufferedReader in,PrintWriter out) {
 
-        this.numBoite = numBoite;
+        this.numBoite = numBoite;//Num de la boite avec laquel on communique
         this.connection = c;
         this.in=in;
         this.out=out;
@@ -54,6 +54,7 @@ public class ServeurForce implements Runnable {
                 e.printStackTrace();
             }
             try {
+                //Création de la Table si elle n'existe pas encore
                 String sql = "CREATE TABLE BoiteForce"+numBoite+"("+
                 "Valeur	INTEGER NOT NULL,"+
                 "Jour	INTEGER NOT NULL,"+
@@ -68,18 +69,15 @@ public class ServeurForce implements Runnable {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
-
-
-
-
-
-
-
+        //Thread qui recoit et traite les packets de données
         ReceptionForce rec=new ReceptionForce(in,checkReception,statement,numBoite);
         Thread reception = new Thread(rec);
+
+        //Thread qui envoie la confirmation de réception des données
         Envoie env=new Envoie(out,checkReception);
         Thread envoie = new Thread(env);
+
+        //Thread qui ouvre la page Web qui affiche les données et qui créer/met à jour les fichiers de données utilisé par les page web
         UptateDataScreenForce screenUp =new UptateDataScreenForce(connection,numBoite);
         Thread screen = new Thread(screenUp);
 

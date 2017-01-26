@@ -25,8 +25,8 @@ public class ClientBouton {
         PrintWriter out = null;
         BufferedReader in = null;
 
-        int numType=0;
-        int numBoite=1;//utiliser un fichier de propriété
+        int numType=0;//type de boite (0 pour la boiteBouton)
+        int numBoite=1;
 
 
         int i[] = {0};//permet de verifier l etat des données envoyées.
@@ -37,7 +37,7 @@ public class ClientBouton {
         Thread demIpServeur = new Thread(demIP);
         demIpServeur.start();
 
-        socket =demIP.socketIpServeur();
+        socket = demIP.socketIpServeur();
 
         try{
 
@@ -45,6 +45,7 @@ public class ClientBouton {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
+            //Envoie du premier message pour donner le num de la boite et son type
             JsonObject json = new JsonObject();
             json.addProperty("numType", numType);
             json.addProperty("numBoite", numBoite);
@@ -54,9 +55,10 @@ public class ClientBouton {
 
             SensorChangeListenerButton s =new SensorChangeListenerButton(out,i);
 
-            Envoie env = new Envoie(out,i,s);
+            Envoie env = new Envoie(out,i,s);//Thread qui va envoyer les données au serveur
             Thread envoie = new Thread(env);
-            Thread reception =new Thread(new Reception(in,i,out));
+
+            Thread reception =new Thread(new Reception(in,i,out));// Thread qui va recevoir la validation de la reception des données par le serveur
             envoie.start();
             reception.start();
 
@@ -76,17 +78,8 @@ public class ClientBouton {
             }
 
 
-
-
-
-
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
-
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (PhidgetException e) {

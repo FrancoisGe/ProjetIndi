@@ -64,7 +64,7 @@ public class Serveur implements Runnable {
             JsonElement numBoite =json.get("numBoite");
 
             try{
-
+                //Création du Thread selon le type de boite
                 switch (typeBoite.getAsInt()){
                     case 0: Thread t0=new Thread(new ServeurBouton(numBoite.getAsInt(),connection,in,out));
                             t0.start();

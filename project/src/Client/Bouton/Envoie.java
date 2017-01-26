@@ -33,7 +33,7 @@ public class Envoie implements Runnable{
     @Override
     public void run() {
         try {
-            ik= OpenNewPhidget.initIK(out,i,s);
+            ik= OpenNewPhidget.initIK(out,i,s);//création de la connection avec les phidgets
 
 
         } catch (Exception e) {
@@ -42,9 +42,6 @@ public class Envoie implements Runnable{
 
 
 
-
-
-        System.out.println("envoie est fini");
 
     }
     public InterfaceKitPhidget getIk(){

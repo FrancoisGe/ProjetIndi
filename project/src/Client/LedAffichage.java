@@ -10,13 +10,12 @@ public class LedAffichage implements Runnable{
 
     private InterfaceKitPhidget ik;
     private int min=1000;
-    private int dif;
+    private int dif;//valeur contenant l'écart de valeur qu'il faut entre l'allumage de 2 leds.
     private boolean isRun;
 
 
     public LedAffichage(InterfaceKitPhidget ik, int dif){
         this.ik =ik;
-
         this.dif = dif;
     }
     @Override
@@ -24,16 +23,15 @@ public class LedAffichage implements Runnable{
         while (isRun) {
             try {
 
-
-
                 int val = ik.getSensorValue(0);
                 if(val<min){val=min;}
+                //éteind les leds.
                 for (int j = 1; j < 6; j++) {
                     ik.setOutputState(j, false);
 
                 }
 
-
+                //allume les leds selon la valeur donnée par les sensors (plus la valeur est importante plus le nombre de leds allumées est élevé)
                 if (val > min) {
                     ik.setOutputState(1, true);
                     if (val > min+dif) {

@@ -24,6 +24,7 @@ public class Envoie implements Runnable{
 
 
             try {
+                //Envoie le nombre de packet recu depuis 1 sec
                 System.out.println("je viens d envoyer un "+ i[0]);
                 send=i[0];
                 out.println(i[0]);

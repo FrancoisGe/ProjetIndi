@@ -26,7 +26,7 @@ public class SensorChangeListenerButton implements SensorChangeListener {
     public void sensorChanged(SensorChangeEvent sensorChangeEvent) {
 
 
-
+        //Lors de l'activation d'un bouton :
 
         int valeur = sensorChangeEvent.getValue();
 
@@ -35,6 +35,7 @@ public class SensorChangeListenerButton implements SensorChangeListener {
         int jour = date.getDay();
 
 
+        // On envoie 1 packet de données(date+num du bouton) au serveur si la valeur du phidget est >=990 car sinon de fausse données son envoyées (lorsqu'on appuis sur un bouton il y a au moins 3 appels au listener donc pour eviter l envoie de message initile on envoie que quand la valeur est sup a 990)
 
         if (valeur >=990) {
             int index = sensorChangeEvent.getIndex();

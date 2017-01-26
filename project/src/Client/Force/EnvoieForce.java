@@ -40,7 +40,7 @@ public class EnvoieForce implements Runnable{
 
 
         try {
-            ik = OpenNewPhidget.initIK(out, i, s);
+            ik = OpenNewPhidget.initIK(out, i, s);//Création de l objet gérant les phidget
 
             Thread led = new Thread(new LedAffichage(ik,100));
             led.start();
@@ -53,10 +53,11 @@ public class EnvoieForce implements Runnable{
                 int heure = date.getHours();
                 int jour = date.getDate();
                 int mois = date.getMonth();
-                int valeur =ik.getSensorValue(0)+ik.getSensorValue(2)+ik.getSensorValue(4)+ik.getSensorValue(6);
+                int valeur =ik.getSensorValue(0)+ik.getSensorValue(2)+ik.getSensorValue(4)+ik.getSensorValue(6);//On récupère la somme des valeurs des sensors de forces
 
 
-
+                //Création du packet de données (date + la somme des valeurs des sensor de force)
+                //On envoie un packet toutes les secondes avec la valeur maximum pendant cette seconde
                 JsonObject json = new JsonObject();
                 json.addProperty("Heure", heure);
                 json.addProperty("Minute", minute);

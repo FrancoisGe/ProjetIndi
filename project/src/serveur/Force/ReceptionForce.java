@@ -42,9 +42,10 @@ public class ReceptionForce implements Runnable{
         while(isRun){
             try {
                 message = in.readLine();
+                //Si on recoit un message d'erreur on ouvre une fenetre pour en avertir l'utilisateur du serveur
                 if (message.equals("erreur "+numBoite)){
                     if(pasErreur) {
-                        System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
+                        System.out.println("il y a un problème !!!!!!!!!!!!!!!");
                         File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
                         FileWriter fw = new FileWriter(f);
                         fw.write("Il y a un problème a la boite " + numBoite);
@@ -55,16 +56,13 @@ public class ReceptionForce implements Runnable{
                 }
                 else {
                     pasErreur=true;
+                    //On  parse le packet de données recu
                     JsonObject json = parser.parse(message).getAsJsonObject();
-
-
                     System.out.println(message);
 
+                    i[0] = i[0] + 1;//On incrémente le compteur car on a un packet de données en plus
 
-                    i[0] = i[0] + 1;
-                    System.out.println(i[0]);// !!!!!!!
-
-
+                    //On ajoute les données dans la BD
                     sql = "INSERT INTO BoiteForce"+numBoite+" (Valeur,Mois,Jour,Heure,Minute,Seconde) " +
                             "VALUES (" + json.get("Valeur") + "," + json.get("Mois") +"," + json.get("Jour") + "," + json.get("Heure") + ","+ json.get("Minute") + ","+json.get("Seconde")+");";
                     System.out.println(sql);

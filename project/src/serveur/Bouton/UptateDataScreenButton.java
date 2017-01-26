@@ -51,18 +51,22 @@ public class UptateDataScreenButton implements Runnable {
     }
     @Override
     public void run() {
-
-
-
-
+        //Utilisation des noms assignés aux différents boutons
+        ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.configName");
+        String[] bouton=new String[8];//tableau qui contient les noms affichés pour les boutons
+        for (int i = 0; i <8 ; i++) {
+            bouton[i]=rb.getString("b"+i);
+        }
 
         try {
+            //ouverture des pages Web
             Process proc = Runtime.getRuntime().exec(page);
             Process proc2 = Runtime.getRuntime().exec(page2);
 
+
+
             while (isRun) {
-
-
+                //Mise à jour des fichiers de données utilisés par les pages webs
                 ResultSet rs = state.executeQuery("SELECT Ind ,COUNT(Valeur) AS nb FROM BoiteBouton"+numBoite+" GROUP BY Ind;");
 
                 FileWriter fw = new FileWriter(f);
@@ -70,21 +74,14 @@ public class UptateDataScreenButton implements Runnable {
                 fw.write("bouton,click\n");
 
 
-
-
                 while (rs.next()) {
-
-
-
-
-                    fw.write("Bouton "+rs.getInt("Ind") + "," + rs.getInt("nb") + "\r\n");
+                    fw.write(bouton[rs.getInt("Ind")] + "," + rs.getInt("nb") + "\r\n");
                 }
-
 
                 rs.close();
                 fw.close();
 
-                //Structure données mapage3
+                //Mise à jour des données de mapage3
                 ResultSet rs3 = state.executeQuery("SELECT  Ind FROM BoiteBouton"+numBoite+" GROUP BY Ind ORDER BY Ind ASC;");
                 int tabBouton[]=new int[8];
                 int lgTab=0;
@@ -92,11 +89,9 @@ public class UptateDataScreenButton implements Runnable {
                 fw2.write("State");
                 while (rs3.next()){
                     tabBouton[lgTab]=rs3.getInt("Ind");
-                    fw2.write(",bouton "+ tabBouton[lgTab]);
+                    fw2.write(","+ bouton[tabBouton[lgTab]]);
                     lgTab++;
                 }
-
-
                 rs3.close();
 
                 int i=0;
@@ -150,17 +145,7 @@ public class UptateDataScreenButton implements Runnable {
                 rs2.close();
 
                 //Structure données mapage3 fin
-
-
-
-
-
                 Thread.sleep(10000);
-
-
-
-
-
             }
 
 
@@ -180,6 +165,7 @@ public class UptateDataScreenButton implements Runnable {
 
 
     public static String ConvertirIntJour(int jour){
+        //Post : renvoit selon la valeur du jour le jour correspondant en String
         switch (jour) {
             case 1:
                 return "Lundi";

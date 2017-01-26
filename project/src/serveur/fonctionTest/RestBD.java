@@ -15,7 +15,7 @@ public class RestBD {
         try {
             Class.forName("org.sqlite.JDBC");
             System.out.println("Driver O.K.");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\ProjetIndividuel2\\INFOB318-16-17-pds\\project\\BaseDeDonnees.db");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:BDProjetIndividuel.db");
             System.out.println("Opened database successfully");
 
 

@@ -1,5 +1,6 @@
 package Client.Temperature;
 
+import Client.DemandeIPServeur;
 import Client.Listener.SensorChangeListenerTemperature;
 import Client.Reception;
 import com.google.gson.JsonObject;
@@ -24,31 +25,18 @@ public class ClientTemperature {
         PrintWriter out = null;
         BufferedReader in = null;
 
-        int numType=1;
-        int numBoite=1;//utiliser un fichier de propriété
+        int numType=1;//type de boite (1 pour la boiteTemperature)
+        int numBoite=1;
 
 
+        int i[] = {0};//permet de verifier l etat des données envoyées.
 
-        int i[] = {0};
-        int min[]={100};
+        //trouver IP Serveur et créé la socket
+        DemandeIPServeur demIP=new DemandeIPServeur();
+        Thread demIpServeur = new Thread(demIP);
+        demIpServeur.start();
 
-        int j =-1;
-        boolean noSocket=true;
-
-        while ((j<100)&&noSocket){
-           try {
-
-
-               j++;
-               socket = new Socket("192.168.1.6", 2000 + j);//utiliser un fichier de propriété pour l IP
-
-               noSocket = false;
-               System.out.println(socket);
-
-           }catch (IOException e){
-
-           }
-        }
+        socket =demIP.socketIpServeur();
 
 
         try{
@@ -57,6 +45,7 @@ public class ClientTemperature {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
+            //Envoie du premier message pour donner le num de la boite et son type
             JsonObject json = new JsonObject();
             json.addProperty("numType", numType);
             json.addProperty("numBoite", numBoite);

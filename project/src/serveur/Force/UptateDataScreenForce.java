@@ -88,6 +88,8 @@ public class UptateDataScreenForce implements Runnable {
     }
 
     public static int jourAnnee(int j,int m) {
+
+        //Post : renvoie le jour de l'année (1 à 366) selon le jour j du mois m
         if (m == 0) {
             return j;
         }

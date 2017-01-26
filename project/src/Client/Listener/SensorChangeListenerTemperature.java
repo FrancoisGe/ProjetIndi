@@ -24,7 +24,6 @@ public class SensorChangeListenerTemperature implements SensorChangeListener{
     public SensorChangeListenerTemperature(PrintWriter out, int[] i){
 
         this.out = out;
-
         this.i=i;
 
     }
@@ -39,12 +38,7 @@ public class SensorChangeListenerTemperature implements SensorChangeListener{
         int mois =date.getMonth();
 
 
-
-
-
-
-
-
+        //Envoie d'un packet de données avec la date et la température
         double valeur = (sensorChangeEvent.getValue()*0.2222)-61.111;
         if (valeur>-5) {
             JsonObject json = new JsonObject();

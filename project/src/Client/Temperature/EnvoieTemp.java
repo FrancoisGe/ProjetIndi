@@ -56,7 +56,7 @@ public class EnvoieTemp implements Runnable{
                     int mois = date.getMonth();
                     double valeur = (ik.getSensorValue(0) * 0.2222) - 61.111;
 
-
+                    //envoie un packet de données toutes les 10 sec (Date +température)
                     JsonObject json = new JsonObject();
                     json.addProperty("Heure", heure);
                     json.addProperty("Minute", minute);

@@ -51,6 +51,7 @@ public class ServeurBouton implements Runnable{
             e.printStackTrace();
         }
         try {
+            //On créer la table si elle n'existe pas
             String sql = "CREATE TABLE BoiteBouton"+numBoite+" ("+
             "Jour	INTEGER NOT NULL,"+
             "Heure	INTEGER NOT NULL,"+
@@ -64,11 +65,15 @@ public class ServeurBouton implements Runnable{
             e.printStackTrace();
         }
 
-
+        //Thread qui recoit et traite les packets de données
         ReceptionBouton rec=new ReceptionBouton(in,checkReception,statement,numBoite);
         Thread reception = new Thread(rec);
+
+        //Thread qui envoie la confirmation de réception des données
         Envoie env=new Envoie(out,checkReception);
         Thread envoie = new Thread(env);
+
+        //Thread qui ouvre la page Web qui affiche les données et qui créer/met à jour les fichiers de données utilisé par les page web
         UptateDataScreenButton screenUp =new UptateDataScreenButton(connection,numBoite);
         Thread screen = new Thread(screenUp);
         screen.start();
@@ -85,13 +90,6 @@ public class ServeurBouton implements Runnable{
 
             screenUp.stopRun();
             env.stopRun();
-
-
-
-
-
-
-
 
         }   catch (InterruptedException e) {
             e.printStackTrace();

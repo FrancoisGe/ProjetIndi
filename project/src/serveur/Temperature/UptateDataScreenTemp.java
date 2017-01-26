@@ -9,8 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
-import serveur.Bouton.UptateDataScreenButton;
-import serveur.Convertion;
 
 /**
  * Created by François on 02-12-16.
@@ -59,7 +57,7 @@ public class UptateDataScreenTemp implements Runnable {
 
 
                 ResultSet rs = state.executeQuery("SELECT Valeur ,Mois,Jour,Heure,Minute,Seconde FROM BoiteTemp"+numBoite+";");
-               // ResultSet rs = state.executeQuery("SELECT Valeur ,Heure,Minute,Seconde FROM BoiteTemp1;");
+
 
                 FileWriter fw = new FileWriter(f);
 

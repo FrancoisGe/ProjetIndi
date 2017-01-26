@@ -18,11 +18,11 @@ public class ReceptionBouton implements Runnable{
     private BufferedReader in;
     private JsonParser parser;
 
-    private int[] i;
+    private int[] i;//Compteur du nombre de packet de données recu
     private Statement state;
     private String sql;
     private int numBoite;
-    private boolean pasErreur;
+    private boolean pasErreur;//Vrai tant qu'on a pas recu de message d erreur d'une boite.
     private boolean isRun;
 
     public ReceptionBouton(BufferedReader in, int[] i, Statement state, int numBoite){
@@ -43,9 +43,10 @@ public class ReceptionBouton implements Runnable{
         while(isRun){
             try {
                 message = in.readLine();
+                //Si on recoit un message d'erreur on ouvre une fenetre pour en avertir l'utilisateur du serveur
                 if (message.equals("erreur "+numBoite)) {
                     if (pasErreur){
-                        System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
+                        System.out.println("il y a un problème !!!!!!!!!!!!!!!");
                         File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
                         FileWriter fw = new FileWriter(f);
                         fw.write("Il y a un problème a la boite " + numBoite);
@@ -57,16 +58,15 @@ public class ReceptionBouton implements Runnable{
                 else {
 
                     pasErreur=true;
+
+                    //On  parse le packet de données recu
                     JsonObject json = parser.parse(message).getAsJsonObject();
-
-
                     System.out.println(message);
 
 
                     i[0] = i[0] + 1;
-                    System.out.println(i[0]);// !!!!!!!
 
-
+                    //On met dans la BD les données recues
                     sql = "INSERT INTO BoiteBouton"+numBoite+" (Valeur,Jour,Ind,Heure) " +
                             "VALUES (" + json.get("Valeur") + "," + json.get("Jour") + "," + json.get("Index") + ","+json.get("Heure")+");";
                     System.out.println(sql);

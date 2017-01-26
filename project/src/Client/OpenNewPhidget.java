@@ -18,6 +18,9 @@ public class OpenNewPhidget {
 
 
     public static InterfaceKitPhidget initIK( PrintWriter out,int[] i,SensorChangeListener s) throws Exception {
+
+        //Post : création de l'InterfaceKitPhidget (en utilisant le SensorChangeListener mis en param)
+
         InterfaceKitPhidget ik = new InterfaceKitPhidget();
 
         System.out.println(Phidget.getLibraryVersion());

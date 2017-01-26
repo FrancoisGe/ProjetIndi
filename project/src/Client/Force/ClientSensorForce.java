@@ -24,16 +24,17 @@ public class ClientSensorForce {
         PrintWriter out = null;
         BufferedReader in = null;
 
-        int numType=2;
-        int numBoite=1;//utiliser un fichier de propriété
+        int numType=2;//type de boite (2 pour la boiteSensorForce)
+        int numBoite=1;
 
-        int i[] = {0};
+        int i[] = {0};//permet de verifier l etat des données envoyées.
 
+        //trouver IP Serveur et créé la socket
         DemandeIPServeur demIP=new DemandeIPServeur();
         Thread demIpServeur = new Thread(demIP);
         demIpServeur.start();
 
-        socket =demIP.socketIpServeur();
+        socket = demIP.socketIpServeur();
 
 
 
@@ -44,6 +45,7 @@ public class ClientSensorForce {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
+            //Envoie du premier message pour donner le num de la boite et son type
             JsonObject json = new JsonObject();
             json.addProperty("numType", numType);
             json.addProperty("numBoite", numBoite);
@@ -54,9 +56,10 @@ public class ClientSensorForce {
             SensorChangeListenerForce s =new SensorChangeListenerForce(out,i);
 
 
-            EnvoieForce env = new EnvoieForce(out,i,s);
+            EnvoieForce env = new EnvoieForce(out,i,s);//Thread qui envoie les données au serveur
             Thread envoie = new Thread(env);
-            Thread reception =new Thread(new Reception(in,i,out));
+
+            Thread reception =new Thread(new Reception(in,i,out));//Thread qui recoit les confimation du serveur
             envoie.start();
             reception.start();
 
@@ -72,13 +75,7 @@ public class ClientSensorForce {
             }
 
 
-
             socket.close();
-
-            System.out.println("la socket est close");
-
-
-
 
 
         }
@@ -89,7 +86,6 @@ public class ClientSensorForce {
         }  catch (InterruptedException e) {
             e.printStackTrace();
         }
-
 
     }
 

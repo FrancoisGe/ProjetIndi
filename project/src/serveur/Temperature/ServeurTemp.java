@@ -55,6 +55,7 @@ public class ServeurTemp implements Runnable{
             e.printStackTrace();
         }
         try {
+            //Création de la table si elle n'existe pas
         String sql = "CREATE TABLE BoiteTemp"+numBoite+" ("+
             "Valeur	REAL NOT NULL,"+
             "Jour	INTEGER NOT NULL,"+
@@ -71,10 +72,14 @@ public class ServeurTemp implements Runnable{
         }
 
 
-        //test
 
+        //Thread qui recoit et traite les packets de données
         Thread reception = new Thread(new ReceptionTemp(in,checkReception,statement,numBoite));
+
+        //Thread qui envoie la confirmation de réception des données
         Thread envoie = new Thread(new Envoie(out,checkReception));
+
+        //Thread qui ouvre la page Web qui affiche les données et qui créer/met à jour les fichiers de données utilisé par les page web
         Thread screen = new Thread(new UptateDataScreenTemp(connection,numBoite));
         screen.start();
 

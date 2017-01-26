@@ -21,19 +21,20 @@ public class EnvoieIP implements Runnable {
             byte[] sendData = new byte[1024];
 
             while (isRun){
+                //Réception du Datagram pour demander l IP
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 serverSocket.receive(receivePacket);
                 String sentence = new String(receivePacket.getData());
                 System.out.println(sentence);
 
 
-
-                    InetAddress IPAddress = receivePacket.getAddress();
-                    int port = receivePacket.getPort();
-                    sentence = InetAddress.getLocalHost().getHostAddress();
-                    sendData = sentence.getBytes();
-                    DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
-                    serverSocket.send(sendPacket);
+                //Création et envoie du Datagram avec l IP du Serveur
+                InetAddress IPAddress = receivePacket.getAddress();
+                int port = receivePacket.getPort();
+                sentence = InetAddress.getLocalHost().getHostAddress();
+                sendData = sentence.getBytes();
+                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
+                serverSocket.send(sendPacket);
 
 
 
