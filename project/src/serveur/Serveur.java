@@ -11,31 +11,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
-import java.sql.Statement;
 
 /**
  * Created by User on 15-12-16.
  */
 public class Serveur implements Runnable {
 
-    ServerSocket socketserver;
+
     Socket socket = new Socket();
 
     PrintWriter out = null;
     BufferedReader in = null;
 
-    int numSocket;
+
 
     Connection connection;
 
 
 
-    public Serveur(int numSocket, Connection c) {
+    public Serveur(Socket socket, Connection c) {
 
-        this.numSocket=numSocket;
+        this.socket=socket;
         this.connection = c;
 
 
@@ -45,19 +43,17 @@ public class Serveur implements Runnable {
     @Override
     public void run() {
         try {
-            socketserver = new ServerSocket(2000+numSocket);
-
-            socket = socketserver.accept();
-            socketserver.close();
 
 
-            System.out.println(socketserver);
+
+            System.out.println(socket);
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
             String  message = in.readLine();
             System.out.println("test"+message);
+
             //le premier message envoyé après une connection entre une boite et le serveur est le numérau de la boite et le numéraux de son type
             //Boite Bouton=0;
             //Boite Température=1;

@@ -1,11 +1,8 @@
 package serveur;
 
-import serveur.Bouton.ServeurBouton;
-import serveur.Force.ServeurForce;
-import serveur.Temperature.ServeurTemp;
-
-import java.io.File;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -23,14 +20,14 @@ public class ServeurPrincipale {
 
 
 
+
         try{
+            EnvoieIP envIP=new EnvoieIP();
+            Thread envoieIP = new Thread(envIP);
+            envoieIP.start();
+
             ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
-
-
             String bd = rb.getString("bd");
-
-
-
 
             Class.forName("org.sqlite.JDBC");
             System.out.println("Driver O.K.");
@@ -44,8 +41,20 @@ public class ServeurPrincipale {
             Thread serveur[]=new Thread[100];
 
             for (int i = 0; i <100 ; i++) {
-                serveur[i] = new Thread(new Serveur(i,connection));
-                serveur[i].start();
+                try {
+
+
+                    ServerSocket socketserver = new ServerSocket(2000);
+                    Socket socket = socketserver.accept();
+                    socketserver.close();
+                    serveur[i] = new Thread(new Serveur(socket,connection));
+                    serveur[i].start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
             }
 
 
@@ -61,6 +70,8 @@ public class ServeurPrincipale {
 
 
             connection.close();
+
+            envIP.stopRun();
 
 
         } catch (ClassNotFoundException e) {

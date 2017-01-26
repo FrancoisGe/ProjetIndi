@@ -1,19 +1,15 @@
 package Client.Force;
 
-import Client.Bouton.Envoie;
-import Client.Listener.SensorChangeListenerButton;
+import Client.DemandeIPServeur;
 import Client.Listener.SensorChangeListenerForce;
-import Client.Listener.SensorChangeListenerTemperature;
 import Client.Reception;
 import com.google.gson.JsonObject;
 import com.phidgets.PhidgetException;
-import com.phidgets.event.SensorChangeListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -32,26 +28,13 @@ public class ClientSensorForce {
         int numBoite=1;//utiliser un fichier de propriété
 
         int i[] = {0};
-        int max[]={0};
-        int maxAll=0;
 
-        int j =-1;
-        boolean noSocket=true;
+        DemandeIPServeur demIP=new DemandeIPServeur();
+        Thread demIpServeur = new Thread(demIP);
+        demIpServeur.start();
 
+        socket =demIP.socketIpServeur();
 
-        while ((j<100)&&noSocket){
-            try {
-
-
-                j++;
-                socket = new Socket("192.168.1.6", 2000 + j);//utiliser un fichier de propriété pour l IP
-
-                noSocket = false;
-
-            }catch (IOException e){
-
-            }
-        }
 
 
 
@@ -68,10 +51,10 @@ public class ClientSensorForce {
             out.println(json);
             out.flush();
 
-            SensorChangeListenerForce s =new SensorChangeListenerForce(out,max);
+            SensorChangeListenerForce s =new SensorChangeListenerForce(out,i);
 
 
-            EnvoieForce env = new EnvoieForce(out,i,s,max);
+            EnvoieForce env = new EnvoieForce(out,i,s);
             Thread envoie = new Thread(env);
             Thread reception =new Thread(new Reception(in,i,out));
             envoie.start();
@@ -87,7 +70,6 @@ public class ClientSensorForce {
             } catch (PhidgetException e) {
                 e.printStackTrace();
             }
-            env.stopRun();
 
 
 

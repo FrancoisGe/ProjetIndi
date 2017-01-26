@@ -1,17 +1,15 @@
 package Client.Bouton;
 
+import Client.DemandeIPServeur;
 import Client.Listener.SensorChangeListenerButton;
 import Client.Reception;
 import com.google.gson.JsonObject;
 import com.phidgets.PhidgetException;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-
 import java.net.Socket;
 
 /**
@@ -31,26 +29,15 @@ public class ClientBouton {
         int numBoite=1;//utiliser un fichier de propriété
 
 
-        int i[] = {0};
-
-        int j =-1;
-        boolean noSocket=true;
-
-        while ((j<100)&&noSocket){
-            try {
+        int i[] = {0};//permet de verifier l etat des données envoyées.
 
 
-                j++;
-                socket = new Socket("192.168.1.6", 2000 + j);//utiliser un fichier de propriété pour l IP
+        //trouver IP Serveur et créé la socket
+        DemandeIPServeur demIP=new DemandeIPServeur();
+        Thread demIpServeur = new Thread(demIP);
+        demIpServeur.start();
 
-                noSocket = false;
-
-            }catch (IOException e){
-
-            }
-        }
-
-
+        socket =demIP.socketIpServeur();
 
         try{
 

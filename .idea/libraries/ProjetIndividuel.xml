@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ProjetIndividuel">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/project/out/artifacts/ProjetIndividuel_jar/ProjetIndividuel.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
