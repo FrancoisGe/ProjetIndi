@@ -35,6 +35,7 @@ public class EnvoieIP implements Runnable {
                 sendData = sentence.getBytes();
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
                 serverSocket.send(sendPacket);
+                System.out.print(IPAddress);
 
 
 
