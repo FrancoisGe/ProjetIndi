@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.sql.Connection;
 
 /**
@@ -35,7 +36,11 @@ public class Serveur implements Runnable {
 
         this.socket=socket;
         this.connection = c;
-
+        try {
+            socket.setSoTimeout(2147483647);//Permet d'éviter un TimeOut pendant l'utilisation du dispositif (24 j fonctionnel)
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
 
 
     }

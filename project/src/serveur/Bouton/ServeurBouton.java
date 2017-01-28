@@ -88,6 +88,7 @@ public class ServeurBouton implements Runnable{
 
             }
 
+            rec.stopRun();
             screenUp.stopRun();
             env.stopRun();
 

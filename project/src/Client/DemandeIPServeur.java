@@ -58,7 +58,7 @@ public class DemandeIPServeur implements Runnable{
     public Socket socketIpServeur() throws IOException {
         //Post : Arrête l'envoie de message en broadcast quand on a recu l'Ip du serveur dans un Datagram
         //      et Return la socket créer appartir de l'adress ip du serveur
-
+        System.out.println("demande reponce");
         byte[] receiveData = new byte[28];
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
         clientSocket.receive(receivePacket);
@@ -66,11 +66,14 @@ public class DemandeIPServeur implements Runnable{
 
         this.stopRun();
         clientSocket.close();
-        try {
 
-            return new Socket(ipServeurRecu, 2000 );
+        try {
+            Socket s= new Socket(ipServeurRecu, 2000 );
+            s.setSoTimeout(2147483647);//Permet d'éviter un TimeOut pendant l'utilisation du dispositif (24 j fonctionnel)
+            return s;
 
         }catch (IOException e){
+            System.out.println("problème");
            return this.socketIpServeur();
         }
 

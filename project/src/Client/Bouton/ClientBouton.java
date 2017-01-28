@@ -39,6 +39,7 @@ public class ClientBouton {
 
         socket = demIP.socketIpServeur();
 
+
         try{
 
 

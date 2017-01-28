@@ -42,8 +42,9 @@ public class EnvoieForce implements Runnable{
         try {
             ik = OpenNewPhidget.initIK(out, i, s);//Création de l objet gérant les phidget
 
-            Thread led = new Thread(new LedAffichage(ik,100));
+            Thread led = new Thread(new LedAffichage(ik));//Thread qui va gérer l'allumage des leds
             led.start();
+            System.out.print("je suis la");
 
             while (isRun) {
 

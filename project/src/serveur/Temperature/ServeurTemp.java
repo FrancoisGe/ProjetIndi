@@ -74,15 +74,18 @@ public class ServeurTemp implements Runnable{
 
 
         //Thread qui recoit et traite les packets de données
-        Thread reception = new Thread(new ReceptionTemp(in,checkReception,statement,numBoite));
+        ReceptionTemp rt =new ReceptionTemp(in,checkReception,statement,numBoite);
+        Thread reception = new Thread(rt);
 
         //Thread qui envoie la confirmation de réception des données
-        Thread envoie = new Thread(new Envoie(out,checkReception));
+        Envoie ev=new Envoie(out,checkReception);
+        Thread envoie = new Thread(ev);
 
         //Thread qui ouvre la page Web qui affiche les données et qui créer/met à jour les fichiers de données utilisé par les page web
-        Thread screen = new Thread(new UptateDataScreenTemp(connection,numBoite));
-        screen.start();
+        UptateDataScreenTemp us =new UptateDataScreenTemp(connection,numBoite);
+        Thread screen = new Thread(us);
 
+        screen.start();
         reception.start();
         envoie.start();
 
@@ -92,16 +95,11 @@ public class ServeurTemp implements Runnable{
                 Thread.sleep(50);
             }
 
-
-            envoie.stop();
-            screen.stop();
-
-
-
+             rt.stopRun();
+             ev.stopRun();
+             us.stopRun();
 
             socket.close();
-
-
 
 
         } catch (IOException e) {

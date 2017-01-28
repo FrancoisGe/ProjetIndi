@@ -92,7 +92,9 @@ public class ServeurForce implements Runnable {
 
             }
             env.stopRun();
+            rec.stopRun();
             screenUp.stopRun();
+
 
 
             socket.close();

@@ -61,9 +61,7 @@ public class ServeurPrincipale {
                 }
             }
 
-
             connection.close();
-
             envIP.stopRun();
 
 

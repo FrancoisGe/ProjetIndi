@@ -3,9 +3,9 @@
     <output-path>$PROJECT_DIR$/out/artifacts/ProjetIndividuel_jar2</output-path>
     <root id="archive" name="ProjetIndividuel.jar">
       <element id="module-output" name="ProjetIndividuel" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/sqlite-jdbc-3.15.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/phidget21.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/gson-2.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/phidget21.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/sqlite-jdbc-3.15.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

@@ -9,6 +9,7 @@ import java.sql.Statement;
 
 /**
  * Created by User on 16-11-16.
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!Classe utilisée pour retirer des données de la BD !!!!!!!!!!!!!!!!!!!!!!
  */
 public class RestBD {
     public static void main(String[] args) {//Ajouter un fichier de configuration
