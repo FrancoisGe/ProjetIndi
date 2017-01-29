@@ -43,23 +43,14 @@ public class OpenNewPhidget {
         });
 
 
-       ik.addSensorChangeListener(s);
+        ik.addSensorChangeListener(s);//On connect le tpe de listener entré en param
         ik.openAny();
         Date date =new Date();
         System.out.println(date);
         System.out.println("waiting for InterfaceKit attachment...");
         ik.waitForAttachment();
         System.out.println(ik.getDeviceName());
-
-
-
-
-
-
-
-
-
-       return ik;
+        return ik;
 
     }
 

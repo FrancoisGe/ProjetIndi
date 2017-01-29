@@ -19,27 +19,32 @@ import java.net.Socket;
 public class ClientTemperature {
     public static void main(String[] args) throws IOException {
 
+        //trouver IP Serveur et créé la socket
+        DemandeIPServeur demIP=new DemandeIPServeur();
+        Thread demIpServeur = new Thread(demIP);
+        demIpServeur.start();
+        activationBoiteTemp(demIP);
 
+
+    }
+
+    private static void activationBoiteTemp(DemandeIPServeur demIP){
         Socket socket = null;
-
         PrintWriter out = null;
         BufferedReader in = null;
 
         int numType=1;//type de boite (1 pour la boiteTemperature)
         int numBoite=1;
 
-
         int i[] = {0};//permet de verifier l etat des données envoyées.
 
-        //trouver IP Serveur et créé la socket
-        DemandeIPServeur demIP=new DemandeIPServeur();
-        Thread demIpServeur = new Thread(demIP);
-        demIpServeur.start();
 
-        socket =demIP.socketIpServeur();
+
 
 
         try{
+            socket = demIP.socketIpServeur();
+            System.out.println(socket);
 
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -53,42 +58,32 @@ public class ClientTemperature {
             out.println(json);
             out.flush();
 
-
-
             SensorChangeListenerTemperature s =new SensorChangeListenerTemperature(out,i);
 
             EnvoieTemp env = new EnvoieTemp(out,i,s);
-           // Thread envoie = new Thread(new Envoie(out,i,s));
             Thread envoieTemp = new Thread(env);
-            Thread reception =new Thread(new Reception(in,i,out));
+            Thread reception =new Thread(new Reception(in,i,out,numBoite));
 
             reception.start();
             envoieTemp.start();
 
-
-
             while(reception.isAlive()){
                 Thread.sleep(50);
-
             }
-
-
-            try {
-                env.getIk().close();
-            } catch (PhidgetException e) {
-                e.printStackTrace();
-            }
-
 
             env.stopRun();
             socket.close();
 
+            Thread.sleep(1000);
+
+            activationBoiteTemp(demIP);//Permet de relancer les Threads quand il y a une exception dans les sockets
 
 
         } catch (IOException e) {
             e.printStackTrace();
         }   catch (InterruptedException e) {
             e.printStackTrace();
+
         }
 
 

@@ -22,8 +22,10 @@ public class UptateDataScreenForce implements Runnable {
 
     private boolean isRun=true;
 
+    private boolean pageOuverte;
 
-    public UptateDataScreenForce(Connection c, int numBoite) {
+
+    public UptateDataScreenForce(Connection c, int numBoite,boolean pageOuverte) {
         ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
 
 
@@ -34,6 +36,8 @@ public class UptateDataScreenForce implements Runnable {
 
 
         this.numBoite = numBoite;
+
+        this.pageOuverte=pageOuverte;
 
 
         ;//fichier data pour mapage3
@@ -52,7 +56,10 @@ public class UptateDataScreenForce implements Runnable {
 
 
         try {
-            Process proc = Runtime.getRuntime().exec(page);
+
+            if(!pageOuverte) {
+                Process proc = Runtime.getRuntime().exec(page);
+            }
             while (isRun) {
 
 

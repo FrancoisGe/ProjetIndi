@@ -34,22 +34,13 @@ public class Envoie implements Runnable{
     public void run() {
         try {
             ik= OpenNewPhidget.initIK(out,i,s);//création de la connection avec les phidgets
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
     }
+
     public InterfaceKitPhidget getIk(){
         return this.ik;
     }
-
-
-
-
 
 }

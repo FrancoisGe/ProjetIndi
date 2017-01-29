@@ -22,10 +22,12 @@ public class UptateDataScreenButton implements Runnable {
     private String page2;
     private boolean isRun;
 
+    private boolean pageOuverte;
 
 
 
-    public UptateDataScreenButton(Connection c, int numBoite){
+
+    public UptateDataScreenButton(Connection c, int numBoite,boolean pageOuverte){
         this.isRun =true;
         ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
         String nf1 = rb.getString("nf1");
@@ -36,6 +38,7 @@ public class UptateDataScreenButton implements Runnable {
         page=rb.getString("page1");
         page2=rb.getString("page2");
         this.numBoite=numBoite;
+        this.pageOuverte=pageOuverte;
 
 
 
@@ -59,9 +62,11 @@ public class UptateDataScreenButton implements Runnable {
         }
 
         try {
-            //ouverture des pages Web
-            Process proc = Runtime.getRuntime().exec(page);
-            Process proc2 = Runtime.getRuntime().exec(page2);
+            //ouverture des pages Web si elles ne l'ont pas déjà étée
+            if (!pageOuverte) {
+                Process proc = Runtime.getRuntime().exec(page);
+                Process proc2 = Runtime.getRuntime().exec(page2);
+            }
 
 
 

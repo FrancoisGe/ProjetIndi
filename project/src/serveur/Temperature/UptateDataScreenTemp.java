@@ -23,20 +23,23 @@ public class UptateDataScreenTemp implements Runnable {
 
     private boolean isRun=true;
 
+    private boolean pageOuverte;
 
-    public UptateDataScreenTemp(Connection c, int numBoite) {
+
+    public UptateDataScreenTemp(Connection c, int numBoite,boolean pageOuverte) {
         ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
 
-       // String nf1 = "C:\\wamp\\www\\data1.tsv";
+       //nf1 contient l'adress ou est la page web
         String nf1 = rb.getString("nft1");
         f = new File(nf1);
        page = rb.getString("pageTemp1");
 
 
         this.numBoite = numBoite;
+        this.pageOuverte=pageOuverte;
 
 
-        ;//fichier data pour mapage3
+
         this.connection = c;
         try {
             state = connection.createStatement();
@@ -52,17 +55,16 @@ public class UptateDataScreenTemp implements Runnable {
 
 
         try {
-            Process proc = Runtime.getRuntime().exec(page);
+            //Ouvre la page internet sur Chrome si elle n'a pas deja été ouverte
+            if(!pageOuverte) {Process proc = Runtime.getRuntime().exec(page);}
             while (isRun) {
 
-
+                //Récupère les données dans la BD pour les mettre dans un fichier de data qui sera utiliser par la page web
                 ResultSet rs = state.executeQuery("SELECT Valeur ,Mois,Jour,Heure,Minute,Seconde FROM BoiteTemp"+numBoite+";");
-
 
                 FileWriter fw = new FileWriter(f);
 
                 fw.write("date\tclose\n");
-
 
                 while (rs.next()) {
 
@@ -70,12 +72,10 @@ public class UptateDataScreenTemp implements Runnable {
                     fw.write( rs.getInt("Seconde") + "-" + rs.getInt("Minute") + "-" +rs.getInt("Heure") +"-"+jour+ "\t"+rs.getFloat("Valeur")+ "\r\n");
                 }
 
-
                 rs.close();
                 fw.close();
 
                 Thread.sleep(1000);
-
 
             }
         } catch (IOException e) {
@@ -88,13 +88,13 @@ public class UptateDataScreenTemp implements Runnable {
     }
 
     public static int jourAnnee(int j,int m){
+        //Pre: j = jour et m = mois
+        //Post : renvoie le jour entre 1 et 366
         if(m==0){return j;}
         if(m==1){return j+31;}
         if (m==2){return 31+29+j;}
         if (m % 2 ==0){return jourAnnee(j,m-1)+30;}
         else{return jourAnnee(j,m-1)+31;}
-
-
     }
     public void stopRun(){
         isRun=false;

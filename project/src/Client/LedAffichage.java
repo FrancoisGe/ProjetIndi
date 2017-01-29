@@ -65,6 +65,7 @@ public class LedAffichage implements Runnable{
                 Thread.sleep(100);
             } catch (PhidgetException e) {
                 e.printStackTrace();
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

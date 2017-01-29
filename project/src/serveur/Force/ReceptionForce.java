@@ -45,10 +45,10 @@ public class ReceptionForce implements Runnable{
                 //Si on recoit un message d'erreur on ouvre une fenetre pour en avertir l'utilisateur du serveur
                 if (message.equals("erreur "+numBoite)){
                     if(pasErreur) {
-                        System.out.println("il y a un problème !!!!!!!!!!!!!!!");
+                        System.out.println("Il y a des données perdues pour la boiteForce "+numBoite);
                         File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
                         FileWriter fw = new FileWriter(f);
-                        fw.write("Il y a un problème a la boite " + numBoite);
+                        fw.write("Il y a des données perdues pour la boiteForce "+numBoite);
                         fw.close();
                         Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
                         pasErreur = false;
@@ -58,7 +58,6 @@ public class ReceptionForce implements Runnable{
                     pasErreur=true;
                     //On  parse le packet de données recu
                     JsonObject json = parser.parse(message).getAsJsonObject();
-                    System.out.println(message);
 
                     i[0] = i[0] + 1;//On incrémente le compteur car on a un packet de données en plus
 

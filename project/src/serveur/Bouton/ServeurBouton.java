@@ -31,13 +31,16 @@ public class ServeurBouton implements Runnable{
     Connection connection;
     Statement statement;
 
+    private boolean pageOuverte;
 
-    public ServeurBouton(int numBoite, Connection c,BufferedReader in,PrintWriter out){
+
+    public ServeurBouton(int numBoite, Connection c,BufferedReader in,PrintWriter out,boolean pageOuverte){
 
         this.numBoite=numBoite;
         this.connection= c;
         this.in=in;
         this.out=out;
+        this.pageOuverte=pageOuverte;
 
 
     }
@@ -74,7 +77,7 @@ public class ServeurBouton implements Runnable{
         Thread envoie = new Thread(env);
 
         //Thread qui ouvre la page Web qui affiche les données et qui créer/met à jour les fichiers de données utilisé par les page web
-        UptateDataScreenButton screenUp =new UptateDataScreenButton(connection,numBoite);
+        UptateDataScreenButton screenUp =new UptateDataScreenButton(connection,numBoite,pageOuverte);
         Thread screen = new Thread(screenUp);
         screen.start();
 
@@ -88,7 +91,6 @@ public class ServeurBouton implements Runnable{
 
             }
 
-            rec.stopRun();
             screenUp.stopRun();
             env.stopRun();
 

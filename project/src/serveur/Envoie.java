@@ -31,7 +31,7 @@ public class Envoie implements Runnable{
                 i[0]=i[0]-send;
                 out.flush();
 
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

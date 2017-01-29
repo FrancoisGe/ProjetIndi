@@ -20,27 +20,29 @@ import java.sql.Statement;
  */
 public class ServeurTemp implements Runnable{
 
-    ServerSocket socketserver;
-    Socket socket = new Socket();
+    private Socket socket = new Socket();
 
-    PrintWriter out = null;
-    BufferedReader in = null;
+    private PrintWriter out = null;
+    private BufferedReader in = null;
 
-    int numBoite;
+    private int numBoite;
 
-    int[] checkReception = {0};//Est utilisé pour vérifie le nombre de message envoyé au serveur moins le nombres de message que le serveur a recu
+    private int[] checkReception = {0};//Est utilisé pour vérifie le nombre de message envoyé au serveur moins le nombres de message que le serveur a recu
 
-    Connection connection;
-    Statement statement;
+    private Connection connection;
+    private Statement statement;
+
+    private boolean pageOuverte;
 
 
-    public ServeurTemp(int numBoite, Connection c,BufferedReader in,PrintWriter out){
+    public ServeurTemp(int numBoite, Connection c,BufferedReader in,PrintWriter out,boolean pageOuverte){
 
 
         this.numBoite=numBoite;
         this.connection= c;
         this.in =in;
         this.out=out;
+        this.pageOuverte = pageOuverte;
 
 
 
@@ -81,9 +83,11 @@ public class ServeurTemp implements Runnable{
         Envoie ev=new Envoie(out,checkReception);
         Thread envoie = new Thread(ev);
 
+
         //Thread qui ouvre la page Web qui affiche les données et qui créer/met à jour les fichiers de données utilisé par les page web
-        UptateDataScreenTemp us =new UptateDataScreenTemp(connection,numBoite);
+        UptateDataScreenTemp us = new UptateDataScreenTemp(connection, numBoite,pageOuverte);
         Thread screen = new Thread(us);
+
 
         screen.start();
         reception.start();
@@ -95,7 +99,6 @@ public class ServeurTemp implements Runnable{
                 Thread.sleep(50);
             }
 
-             rt.stopRun();
              ev.stopRun();
              us.stopRun();
 
@@ -107,7 +110,5 @@ public class ServeurTemp implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
     }
 }

@@ -1,5 +1,7 @@
 package Client;
 
+import com.sun.deploy.util.SessionState;
+
 import java.io.IOException;
 import java.net.*;
 
@@ -10,6 +12,8 @@ public class DemandeIPServeur implements Runnable{
 
     private boolean isRun = true;
     private DatagramSocket clientSocket;
+    private String ipServeurRecu;
+    private boolean ipRecu = false;
 
     public DemandeIPServeur(){
 
@@ -55,26 +59,33 @@ public class DemandeIPServeur implements Runnable{
         isRun=false;
     }
 
-    public Socket socketIpServeur() throws IOException {
-        //Post : Arrête l'envoie de message en broadcast quand on a recu l'Ip du serveur dans un Datagram
-        //      et Return la socket créer appartir de l'adress ip du serveur
-        System.out.println("demande reponce");
+    public void receptionIP() throws IOException {
+        //POST : renvoie l'ip recue dans le datagramme du serveur
+
+        System.out.println("Attends reponse du serveur (IP)");
         byte[] receiveData = new byte[28];
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
         clientSocket.receive(receivePacket);
-        String ipServeurRecu = new String(receivePacket.getData());
+        this.ipServeurRecu = new String(receivePacket.getData());
+        this.ipRecu=true;
+    }
 
-        this.stopRun();
-        clientSocket.close();
-
+    public Socket socketIpServeur() throws IOException {
+        //Post : Arrête l'envoie de message en broadcast quand on a recu l'Ip du serveur dans un Datagram
+        //      et Return la socket créer appartir de l'adress ip du serveur
+        if (!this.ipRecu){receptionIP();}
+        while (!this.ipRecu){}
         try {
-            Socket s= new Socket(ipServeurRecu, 2000 );
+
+            Socket s= new Socket(this.ipServeurRecu, 2000 );
             s.setSoTimeout(2147483647);//Permet d'éviter un TimeOut pendant l'utilisation du dispositif (24 j fonctionnel)
+            this.stopRun();
+            clientSocket.close();
             return s;
 
         }catch (IOException e){
-            System.out.println("problème");
-           return this.socketIpServeur();
+            System.out.println("Erreur de connection à l'IP reçue");
+            return this.socketIpServeur();
         }
 
     }

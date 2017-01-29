@@ -43,7 +43,9 @@ public class EnvoieTemp implements Runnable{
                 ik = OpenNewPhidget.initIK(out, i, s);
                 ik.setSensorChangeTrigger(0,2);
 
-                Thread led = new Thread(new LedAffichage(ik));//Thread qui va gérer l'allumage des leds
+                //Thread qui va gérer l'allumage des leds
+                LedAffichage l =new LedAffichage(ik);
+                Thread led = new Thread(l);
                 led.start();
 
                 while (isRun) {
@@ -75,9 +77,9 @@ public class EnvoieTemp implements Runnable{
 
 
                     Thread.sleep(10000);
-
-
                 }
+                ik.close();
+                l.stopRun();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (PhidgetException e) {
@@ -85,6 +87,7 @@ public class EnvoieTemp implements Runnable{
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
 
     }
     public InterfaceKitPhidget getIk(){

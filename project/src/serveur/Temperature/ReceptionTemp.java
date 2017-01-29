@@ -46,10 +46,10 @@ public class ReceptionTemp implements Runnable{
                 message = in.readLine();
                 if ((message.equals("erreur "+numBoite))&&t){
                     if (pasErreur) {
-                        System.out.println("il y a un problè=e !!!!!!!!!!!!!!!");
+                        System.out.println("Il y a des données perdues pour la boiteTemp "+numBoite);
                         File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
                         FileWriter fw = new FileWriter(f);
-                        fw.write("Il y a un problème a la boite " + numBoite);
+                        fw.write("Il y a des données perdues pour la boiteTemp "+numBoite);
                         fw.close();
                         Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
                         pasErreur = false;
@@ -61,13 +61,7 @@ public class ReceptionTemp implements Runnable{
 
                     JsonObject json = parser.parse(message).getAsJsonObject();
 
-
-                    System.out.println(message);
-
-
-                    i[0] = i[0] + 1;
-                    System.out.println(i[0]);// !!!!!!!
-
+                    i[0] = i[0] + 1;//On incrémente le compteur car on a un packet de données en plus
 
                     sql = "INSERT INTO BoiteTemp"+numBoite+ "(Valeur,Mois,Jour,Heure,Minute,Seconde) " +
                             "VALUES (" + json.get("Valeur") + "," + json.get("Mois") +"," + json.get("Jour") + "," + json.get("Heure") + ","+ json.get("Minute") + ","+json.get("Seconde")+");";

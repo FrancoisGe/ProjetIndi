@@ -20,6 +20,16 @@ public class ClientBouton {
     public static void main(String[] args) throws IOException {
 
 
+        //trouver IP Serveur et créé la socket
+        DemandeIPServeur demIP=new DemandeIPServeur();
+        Thread demIpServeur = new Thread(demIP);
+        demIpServeur.start();
+
+        activationBoiteTemp(demIP);
+
+    }
+
+    private static void activationBoiteTemp(DemandeIPServeur demIP){
         Socket socket = new Socket();
 
         PrintWriter out = null;
@@ -32,16 +42,13 @@ public class ClientBouton {
         int i[] = {0};//permet de verifier l etat des données envoyées.
 
 
-        //trouver IP Serveur et créé la socket
-        DemandeIPServeur demIP=new DemandeIPServeur();
-        Thread demIpServeur = new Thread(demIP);
-        demIpServeur.start();
 
-        socket = demIP.socketIpServeur();
+
+
 
 
         try{
-
+            socket = demIP.socketIpServeur();
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
@@ -59,7 +66,7 @@ public class ClientBouton {
             Envoie env = new Envoie(out,i,s);//Thread qui va envoyer les données au serveur
             Thread envoie = new Thread(env);
 
-            Thread reception =new Thread(new Reception(in,i,out));// Thread qui va recevoir la validation de la reception des données par le serveur
+            Thread reception =new Thread(new Reception(in,i,out,numBoite));// Thread qui va recevoir la validation de la reception des données par le serveur
             envoie.start();
             reception.start();
 
@@ -68,8 +75,6 @@ public class ClientBouton {
                 Thread.sleep(50);
 
             }
-            socket.close();
-
 
             if (env.getIk()==(null)){
                 System.out.println("ok");
@@ -78,6 +83,11 @@ public class ClientBouton {
                 env.getIk().close();
             }
 
+            socket.close();
+
+            Thread.sleep(1000);
+
+            activationBoiteTemp(demIP);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,8 +96,6 @@ public class ClientBouton {
         } catch (PhidgetException e) {
             e.printStackTrace();
         }
-
-
 
     }
 }

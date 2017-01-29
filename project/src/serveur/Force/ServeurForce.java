@@ -21,25 +21,28 @@ import java.sql.Statement;
 public class ServeurForce implements Runnable {
 
 
-    Socket socket = new Socket();
+    private Socket socket = new Socket();
 
-    PrintWriter out = null;
-    BufferedReader in = null;
+    private PrintWriter out = null;
+    private BufferedReader in = null;
 
-    int numBoite;
+    private int numBoite;
 
-    int[] checkReception = {0};//Est utilisé pour vérifie le nombre de message envoyé au serveur moins le nombres de message que le serveur a recu
+    private int[] checkReception = {0};//Est utilisé pour vérifie le nombre de message envoyé au serveur moins le nombres de message que le serveur a recu
 
-    Connection connection;
-    Statement statement;
+    private Connection connection;
+    private Statement statement;
+
+    private boolean pageOuverte;
 
 
-    public ServeurForce(int numBoite, Connection c,BufferedReader in,PrintWriter out) {
+    public ServeurForce(int numBoite, Connection c,BufferedReader in,PrintWriter out,boolean pageOuverte) {
 
         this.numBoite = numBoite;//Num de la boite avec laquel on communique
         this.connection = c;
         this.in=in;
         this.out=out;
+        this.pageOuverte=pageOuverte;
 
 
 
@@ -78,7 +81,7 @@ public class ServeurForce implements Runnable {
         Thread envoie = new Thread(env);
 
         //Thread qui ouvre la page Web qui affiche les données et qui créer/met à jour les fichiers de données utilisé par les page web
-        UptateDataScreenForce screenUp =new UptateDataScreenForce(connection,numBoite);
+        UptateDataScreenForce screenUp =new UptateDataScreenForce(connection,numBoite,pageOuverte);
         Thread screen = new Thread(screenUp);
 
         screen.start();
@@ -92,7 +95,6 @@ public class ServeurForce implements Runnable {
 
             }
             env.stopRun();
-            rec.stopRun();
             screenUp.stopRun();
 
 

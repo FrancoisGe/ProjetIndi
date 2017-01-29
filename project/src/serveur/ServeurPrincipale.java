@@ -35,21 +35,29 @@ public class ServeurPrincipale {
             System.out.println("Opened database successfully");
 
 
-            Thread serveur[]=new Thread[100];
+            Thread serveur[]=new Thread[1000];
 
-            for (int i = 0; i <100 ; i++) {
+            /*Tableau content la liste de toutes les boites qui se sont déjà connectée
+             * la valeur pageWebActive[0][0] contient le nombre de pair ajouté dans le tableau
+             *Ex:
+             * On connecte une première boite : boiteTemp2 sera pageWebActive[1][0]=1 et pageWebActive[1][0] = 2
+             * Première valeur le type et la deuxième le num de la boite.
+             */
+            int[][] pageWebActive= new int[100][2];
+            pageWebActive[0][0]=0;
+
+            for (int i = 0; i <1000 ; i++) {
                 try {
 
                     //Création de la socket serveur pour communiquer avec une boite
                     ServerSocket socketserveur = new ServerSocket(2000);
                     Socket socket = socketserveur.accept();
                     socketserveur.close();
-                    serveur[i] = new Thread(new Serveur(socket,connection));//Thread qui va gérer l interaction entre le serveur et la boite
+                    serveur[i] = new Thread(new Serveur(socket,connection,pageWebActive));//Thread qui va gérer l interaction entre le serveur et la boite
                     serveur[i].start();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
 
 
@@ -63,7 +71,6 @@ public class ServeurPrincipale {
 
             connection.close();
             envIP.stopRun();
-
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

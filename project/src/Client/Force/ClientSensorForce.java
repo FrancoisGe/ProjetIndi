@@ -18,7 +18,17 @@ import java.net.Socket;
 public class ClientSensorForce {
     public static void main(String[] args) throws IOException {
 
+        //trouver IP Serveur et créé la socket
+        DemandeIPServeur demIP=new DemandeIPServeur();
+        Thread demIpServeur = new Thread(demIP);
+        demIpServeur.start();
 
+        activationBoiteTemp(demIP);
+
+
+    }
+
+    private static void activationBoiteTemp(DemandeIPServeur demIP){
         Socket socket = new Socket();
 
         PrintWriter out = null;
@@ -29,18 +39,13 @@ public class ClientSensorForce {
 
         int i[] = {0};//permet de verifier l etat des données envoyées.
 
-        //trouver IP Serveur et créé la socket
-        DemandeIPServeur demIP=new DemandeIPServeur();
-        Thread demIpServeur = new Thread(demIP);
-        demIpServeur.start();
 
-        socket = demIP.socketIpServeur();
 
 
 
 
         try{
-
+            socket = demIP.socketIpServeur();
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
@@ -59,7 +64,7 @@ public class ClientSensorForce {
             EnvoieForce env = new EnvoieForce(out,i,s);//Thread qui envoie les données au serveur
             Thread envoie = new Thread(env);
 
-            Thread reception =new Thread(new Reception(in,i,out));//Thread qui recoit les confimation du serveur
+            Thread reception =new Thread(new Reception(in,i,out,numBoite));//Thread qui recoit les confimation du serveur
             envoie.start();
             reception.start();
 
@@ -68,15 +73,11 @@ public class ClientSensorForce {
                 Thread.sleep(50);
             }
 
-            try {
-                env.getIk().close();
-            } catch (PhidgetException e) {
-                e.printStackTrace();
-            }
-
-
+            env.stopRun();
             socket.close();
 
+            Thread.sleep(1000);
+            activationBoiteTemp(demIP);
 
         }
 
@@ -86,6 +87,7 @@ public class ClientSensorForce {
         }  catch (InterruptedException e) {
             e.printStackTrace();
         }
+
 
     }
 
