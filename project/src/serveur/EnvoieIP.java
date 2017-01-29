@@ -25,8 +25,6 @@ public class EnvoieIP implements Runnable {
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 serverSocket.receive(receivePacket);
                 String sentence = new String(receivePacket.getData());
-                System.out.println(sentence+"fini");
-
 
                 //Création et envoie du Datagram avec l IP du Serveur
                 InetAddress IPAddress = receivePacket.getAddress();
@@ -35,7 +33,7 @@ public class EnvoieIP implements Runnable {
                 sendData = sentence.getBytes();
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
                 serverSocket.send(sendPacket);
-                System.out.print(IPAddress);
+                System.out.println("Le serveur envoie son IP à "+IPAddress);
 
             }
 

@@ -59,7 +59,14 @@ public class UptateDataScreenTemp implements Runnable {
             if(!pageOuverte) {Process proc = Runtime.getRuntime().exec(page);}
             while (isRun) {
 
-                //Récupère les données dans la BD pour les mettre dans un fichier de data qui sera utiliser par la page web
+                /*Récupère les données dans la BD pour les mettre dans un fichier de data qui sera utiliser par la page web
+                    Expemple :
+                    date	close
+                    18-10-19-29	19.7698
+                    18-10-19-29	19.7698
+                    28-10-19-29	19.992
+                 */
+
                 ResultSet rs = state.executeQuery("SELECT Valeur ,Mois,Jour,Heure,Minute,Seconde FROM BoiteTemp"+numBoite+";");
 
                 FileWriter fw = new FileWriter(f);

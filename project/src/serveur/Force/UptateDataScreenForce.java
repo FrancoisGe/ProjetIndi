@@ -62,9 +62,15 @@ public class UptateDataScreenForce implements Runnable {
             }
             while (isRun) {
 
+                /*Récupération des données et mise à jour du fichier de data pour mapageForce
+                    Exemple
+                    date	close
+                    11-5-20-29	0.0
+                    12-5-20-29	19.0
+                    13-5-20-29	8.0
+                 */
 
                 ResultSet rs = state.executeQuery("SELECT Valeur ,Mois,Jour,Heure,Minute,Seconde FROM BoiteForce"+numBoite+";");
-                // ResultSet rs = state.executeQuery("SELECT Valeur ,Heure,Minute,Seconde FROM BoiteTemp1;");
 
                 FileWriter fw = new FileWriter(f);
 

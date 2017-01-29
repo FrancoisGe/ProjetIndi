@@ -71,7 +71,12 @@ public class UptateDataScreenButton implements Runnable {
 
 
             while (isRun) {
-                //Mise à jour des fichiers de données utilisés par les pages webs
+                /*Mise à jour des fichiers de données utilisés par la page web avec le disque
+                    Exemple:
+                    bouton,click
+                    0,3
+                 */
+
                 ResultSet rs = state.executeQuery("SELECT Ind ,COUNT(Valeur) AS nb FROM BoiteBouton"+numBoite+" GROUP BY Ind;");
 
                 FileWriter fw = new FileWriter(f);
@@ -86,7 +91,12 @@ public class UptateDataScreenButton implements Runnable {
                 rs.close();
                 fw.close();
 
-                //Mise à jour des données de mapage3
+                /*Mise à jour des données du fichier de Data pour page web les graphes en batonet
+                    Exemple :
+                    State,0
+                    Dimanche : 19h,3
+                 */
+
                 ResultSet rs3 = state.executeQuery("SELECT  Ind FROM BoiteBouton"+numBoite+" GROUP BY Ind ORDER BY Ind ASC;");
                 int tabBouton[]=new int[8];
                 int lgTab=0;
@@ -125,7 +135,6 @@ public class UptateDataScreenButton implements Runnable {
 
                     }
                     else{
-                        int tabOccurence[]={0,0,0,0,0,0,0,0};//max 8 ports dans le phidget
 
                         fw2.write("\n");
                         i=0;
@@ -149,7 +158,7 @@ public class UptateDataScreenButton implements Runnable {
                 fw2.close();
                 rs2.close();
 
-                //Structure données mapage3 fin
+                //Structure données fin
                 Thread.sleep(10000);
             }
 
