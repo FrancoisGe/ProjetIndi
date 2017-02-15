@@ -7,10 +7,7 @@ import serveur.Bouton.ServeurBouton;
 import serveur.Force.ServeurForce;
 import serveur.Temperature.ServeurTemp;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.sql.Connection;
@@ -29,13 +26,20 @@ public class Serveur implements Runnable {
     private Connection connection;
 
     private int[][] pageWebActive;
+    private boolean verbose;
 
 
-
-    public Serveur(Socket socket, Connection c,int[][] pageWebActive) {
+    /**
+     *
+     * @param socket
+     * @param c
+     * @param pageWebActive
+     */
+    public Serveur(Socket socket, Connection c,int[][] pageWebActive,boolean verbose) {
         this.pageWebActive = pageWebActive;
         this.socket=socket;
         this.connection = c;
+        this.verbose=verbose;
         try {
             socket.setSoTimeout(2147483647);//Permet d'éviter un TimeOut pendant l'utilisation du dispositif (24 j fonctionnel)
         } catch (SocketException e) {
@@ -45,17 +49,18 @@ public class Serveur implements Runnable {
 
     }
 
+
     @Override
     public void run() {
         try {
 
-            System.out.println(socket);
+            if(verbose) {System.out.println(socket);}
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
             String  message = in.readLine();
-            System.out.println(message);
+            if(verbose) {System.out.println(message);}
 
             //le premier message envoyé après une connection entre une boite et le serveur est le numérau de la boite et le numéraux de son type
             //Boite Bouton=0;
@@ -71,17 +76,17 @@ public class Serveur implements Runnable {
             try{
                 //Création du Thread selon le type de boite
                 switch (typeBoite.getAsInt()){
-                    case 0: Thread t0=new Thread(new ServeurBouton(numBoite.getAsInt(),connection,in,out,pageOuverte));
+                    case 0: Thread t0=new Thread(new ServeurBouton(numBoite.getAsInt(),connection,in,out,pageOuverte,verbose));
                             t0.start();
                             while(t0.isAlive()){Thread.sleep(50);}
-                        socket.close();
+                            socket.close();
                             break;
-                    case 1: Thread t1=new Thread(new ServeurTemp(numBoite.getAsInt(),connection,in,out,pageOuverte));
+                    case 1: Thread t1=new Thread(new ServeurTemp(numBoite.getAsInt(),connection,in,out,pageOuverte,verbose));
                             t1.start();
                             while(t1.isAlive()){Thread.sleep(50);}
                             socket.close();
                             break;
-                    case 2: Thread t2=new Thread(new ServeurForce(numBoite.getAsInt(),connection,in,out,pageOuverte));
+                    case 2: Thread t2=new Thread(new ServeurForce(numBoite.getAsInt(),connection,in,out,pageOuverte,verbose));
                             t2.start();
                             while(t2.isAlive()){Thread.sleep(50);}
                             socket.close();
@@ -99,11 +104,15 @@ public class Serveur implements Runnable {
         }
     }
 
+    /**
+     *
+     * @param type : type de boite à vérifier
+     * @param num  : numéro de la boite à vérifier
+     * @return true si la boite a déjà été ajoutée à pageWebActive
+     *         false si la boite n'a pas deja été ajoutée à pageWebActive et on l'ajoute
+     */
     private boolean pageDejaOuverte(int type,int num){
-        /*
-        *Post: renvoie true si la boite a deja été ajoutée a pageWebActive
-        *       renvoie false si la boite n'a pas deja été ajoutée a pageWebActive et on l'ajoute
-        */
+
         for (int i = 1; i <pageWebActive.length ; i++) {
             if ((pageWebActive[i][0]==type)&&(pageWebActive[i][1]==num)){
                 return true;
@@ -116,4 +125,6 @@ public class Serveur implements Runnable {
         return false;
 
     }
+
+
 }

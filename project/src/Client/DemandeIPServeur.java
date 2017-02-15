@@ -1,6 +1,7 @@
 package Client;
 
 import com.sun.deploy.util.SessionState;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.io.IOException;
 import java.net.*;
@@ -62,12 +63,19 @@ public class DemandeIPServeur implements Runnable{
     public void receptionIP() throws IOException {
         //POST : renvoie l'ip recue dans le datagramme du serveur
 
+        //TODO Retirer message test
+        System.out.println("je suis au début de receptionIP -> boite");
+
+
         System.out.println("Attends reponse du serveur (IP)");
         byte[] receiveData = new byte[28];
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
         clientSocket.receive(receivePacket);
         this.ipServeurRecu = new String(receivePacket.getData());
         this.ipRecu=true;
+
+        //TODO Retirer message test
+        System.out.println("je suis passé dans receptionIP -> boite");
     }
 
     public Socket socketIpServeur() throws IOException {

@@ -24,8 +24,9 @@ public class ReceptionBouton implements Runnable{
     private int numBoite;
     private boolean pasErreur;//Vrai tant qu'on a pas recu de message d erreur d'une boite.
     private boolean isRun;
+    private boolean verbose;
 
-    public ReceptionBouton(BufferedReader in, int[] i, Statement state, int numBoite){
+    public ReceptionBouton(BufferedReader in, int[] i, Statement state, int numBoite,boolean verbose){
         parser = new JsonParser();
         this.in = in;
         this.i = i;
@@ -33,6 +34,7 @@ public class ReceptionBouton implements Runnable{
         this.numBoite=numBoite;
         this.pasErreur =true;
         this.isRun =true;
+        this.verbose=verbose;
     }
 
 
@@ -69,7 +71,7 @@ public class ReceptionBouton implements Runnable{
                     //On met dans la BD les données recues
                     sql = "INSERT INTO BoiteBouton"+numBoite+" (Valeur,Jour,Ind,Heure) " +
                             "VALUES (" + json.get("Valeur") + "," + json.get("Jour") + "," + json.get("Index") + ","+json.get("Heure")+");";
-                    System.out.println(sql);
+                    if(verbose){ System.out.println(sql);}
                     state.executeUpdate(sql);
                 }
 

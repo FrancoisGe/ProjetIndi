@@ -1,5 +1,10 @@
 package serveur;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,23 +21,33 @@ public class ServeurPrincipale {
 
 
         Connection connection;
+        boolean verbose=false;
+
+        if ((args.length>0) && (args[0].equals("-v"))){
+            verbose =true;
+            System.out.println("Le mode verbose est activé");
+        }
 
         try{
             //Thread qui va gérer la communication de l IP aux boites
-            EnvoieIP envIP=new EnvoieIP();
+            EnvoieIP envIP=new EnvoieIP(verbose);
             Thread envoieIP = new Thread(envIP);
             envoieIP.start();
 
-            //Connection au fichier de propriété pour avoir le nom de la bd
-            ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.config");
-            String bd = rb.getString("bd");
+
+            //Il faut que le fichier Config.txt soit configuré et soit dans le même dossier que le jar
+            //On récupère les données du fichier de config sous format JSON
+            JsonObject json = ServeurPrincipale.créerJsonAvecFile("Config.txt");
+            //Récupère le nom de la bd
+            String bd = json.get("bd").getAsString();
 
             Class.forName("org.sqlite.JDBC");
-            System.out.println("Driver O.K.");
+            if (verbose){ System.out.println("Driver O.K.");}
+
 
             //Connection à la bd
             connection = DriverManager.getConnection("jdbc:sqlite:"+bd);
-            System.out.println("Opened database successfully");
+            if (verbose){System.out.println("Opened database successfully");}
 
 
             Thread serveur[]=new Thread[1000];
@@ -53,7 +68,7 @@ public class ServeurPrincipale {
                     ServerSocket socketserveur = new ServerSocket(2000);
                     Socket socket = socketserveur.accept();
                     socketserveur.close();
-                    serveur[i] = new Thread(new Serveur(socket,connection,pageWebActive));//Thread qui va gérer l interaction entre le serveur et la boite
+                    serveur[i] = new Thread(new Serveur(socket,connection,pageWebActive,verbose));//Thread qui va gérer l interaction entre le serveur et la boite
                     serveur[i].start();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -72,15 +87,38 @@ public class ServeurPrincipale {
             connection.close();
             envIP.stopRun();
 
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
+    }
+
+    public static JsonObject créerJsonAvecFile(String nf) throws IOException {
+
+        FileReader fr = new FileReader(nf);
+        System.out.println(new File(nf).getAbsolutePath());
+        char[] buff =new char[1000];
+        fr.read(buff);
+        String s =new String(buff);
+
+        int i=0;
+        while (buff[i]!='}'){
+            i++;
+        }
+        i++;
+        s=s.substring(0,i);
+        JsonParser parser =new JsonParser();
+        JsonObject json = parser.parse(s).getAsJsonObject();
+
+        return json;
     }
 
 }

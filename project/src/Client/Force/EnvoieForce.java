@@ -22,14 +22,13 @@ public class EnvoieForce implements Runnable{
 
 
 
+
     private int[] i;
 
     public EnvoieForce(PrintWriter out, int[] i, SensorChangeListenerForce s){
         this.out = out;
         this.i =i;
         this.s=s;
-
-
     }
 
     @Override
@@ -55,7 +54,7 @@ public class EnvoieForce implements Runnable{
                 int heure = date.getHours();
                 int jour = date.getDate();
                 int mois = date.getMonth();
-                int valeur =ik.getSensorValue(0)+ik.getSensorValue(2)+ik.getSensorValue(4)+ik.getSensorValue(6);//On récupère la somme des valeurs des sensors de forces
+                int valeur =s.getMax();//On récupère la somme des valeurs des sensors de forces
 
 
                 //Création du packet de données (date + la somme des valeurs des sensor de force)
@@ -76,6 +75,7 @@ public class EnvoieForce implements Runnable{
                 out.println(json);
                 out.flush();
 
+                s.resetMax();
                 Thread.sleep(1000);
             }
             ik.close();

@@ -72,6 +72,11 @@ public class EnvoieTemp implements Runnable{
                     i[0] = i[0] + 1;
                     System.out.println("envoie :" + i[0]);
 
+                    //TODO ajouter test et redemarer
+                    if (i[0]>50){
+
+                    }
+
                     out.println(json);
                     out.flush();
 

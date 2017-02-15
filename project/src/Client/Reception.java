@@ -38,10 +38,9 @@ public class Reception implements Runnable {
 
 
                 //Si une trop grosse perte de packet on envoie un message d'erreur car cela signifie qu'il y un problème technique et cela permet d'en informer le serveur
-                if(i[0]>1000){
-                    out.println("erreur "+numBoite);
-                    out.flush();
-                    i[0]=100;
+                if(i[0]>50){
+                    i[0]=0;
+                    isRun=false;
                 }
 
             } catch (IOException e) {
@@ -50,11 +49,7 @@ public class Reception implements Runnable {
 
             }
 
-
         }
-
-
-
 
     }
 

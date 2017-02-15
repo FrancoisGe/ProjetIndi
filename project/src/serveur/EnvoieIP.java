@@ -12,7 +12,12 @@ import java.net.SocketException;
 public class EnvoieIP implements Runnable {
 
     private boolean isRun =true;
+    private boolean verbose;
 
+    public EnvoieIP(boolean verbose){
+        this.verbose = verbose;
+
+    }
     @Override
     public void run() {
         try {
@@ -33,7 +38,7 @@ public class EnvoieIP implements Runnable {
                 sendData = sentence.getBytes();
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
                 serverSocket.send(sendPacket);
-                System.out.println("Le serveur envoie son IP à "+IPAddress);
+                if (verbose){System.out.println("Le serveur envoie son IP à "+IPAddress);}
 
             }
 

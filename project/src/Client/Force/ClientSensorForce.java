@@ -38,7 +38,7 @@ public class ClientSensorForce {
         int numBoite=1;
 
         int i[] = {0};//permet de verifier l etat des données envoyées.
-
+        int max[]={0};//Valeur maximum enregistrée par la somme des capteurs de forces
 
 
 
@@ -58,7 +58,7 @@ public class ClientSensorForce {
             out.println(json);
             out.flush();
 
-            SensorChangeListenerForce s =new SensorChangeListenerForce(out,i);
+            SensorChangeListenerForce s =new SensorChangeListenerForce(out,max);
 
 
             EnvoieForce env = new EnvoieForce(out,i,s);//Thread qui envoie les données au serveur
@@ -77,11 +77,10 @@ public class ClientSensorForce {
             socket.close();
 
             Thread.sleep(1000);
+
             activationBoiteTemp(demIP);
 
-        }
-
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
 
         }  catch (InterruptedException e) {

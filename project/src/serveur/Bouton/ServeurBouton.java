@@ -1,14 +1,9 @@
 package serveur.Bouton;
 
 import serveur.Envoie;
-import serveur.Temperature.UptateDataScreenTemp;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,30 +13,28 @@ import java.sql.Statement;
  */
 public class ServeurBouton implements Runnable{
 
+    private PrintWriter out = null;
+    private BufferedReader in = null;
 
+    private int numBoite;
 
+    private int[] checkReception = {0};//Est utilisé pour vérifie le nombre de message envoyé au serveur moins le nombres de message que le serveur a recu
 
-    PrintWriter out = null;
-    BufferedReader in = null;
-
-    int numBoite;
-
-    int[] checkReception = {0};//Est utilisé pour vérifie le nombre de message envoyé au serveur moins le nombres de message que le serveur a recu
-
-    Connection connection;
-    Statement statement;
+    private Connection connection;
+    private Statement statement;
 
     private boolean pageOuverte;
+    private boolean verbose;
 
 
-    public ServeurBouton(int numBoite, Connection c,BufferedReader in,PrintWriter out,boolean pageOuverte){
+    public ServeurBouton(int numBoite, Connection c,BufferedReader in,PrintWriter out,boolean pageOuverte,boolean verbose){
 
         this.numBoite=numBoite;
         this.connection= c;
         this.in=in;
         this.out=out;
         this.pageOuverte=pageOuverte;
-
+        this.verbose=verbose;
 
     }
 
@@ -53,31 +46,34 @@ public class ServeurBouton implements Runnable{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        String nom = "BoiteBouton"+numBoite;
         try {
             //On créer la table si elle n'existe pas
-            String sql = "CREATE TABLE BoiteBouton"+numBoite+" ("+
+            String sql = "CREATE TABLE "+nom+" ("+
             "Jour	INTEGER NOT NULL,"+
             "Heure	INTEGER NOT NULL,"+
             "Ind	INTEGER NOT NULL,"+
             "Valeur	INTEGER NOT NULL);";
 
-            System.out.println(sql);
+            if (verbose){System.out.println(sql);}
 
             statement.executeUpdate(sql);
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (verbose) {System.out.println("La table de la "+ nom+" existe déjà dans la BD");}
         }
 
         //Thread qui recoit et traite les packets de données
-        ReceptionBouton rec=new ReceptionBouton(in,checkReception,statement,numBoite);
+        ReceptionBouton rec=new ReceptionBouton(in,checkReception,statement,numBoite,verbose);
         Thread reception = new Thread(rec);
 
+
         //Thread qui envoie la confirmation de réception des données
-        Envoie env=new Envoie(out,checkReception);
+        Envoie env=new Envoie(out,checkReception,verbose,nom);
         Thread envoie = new Thread(env);
 
         //Thread qui ouvre la page Web qui affiche les données et qui créer/met à jour les fichiers de données utilisé par les page web
-        UptateDataScreenButton screenUp =new UptateDataScreenButton(connection,numBoite,pageOuverte);
+        UpdateDataScreenBouton screenUp =new UpdateDataScreenBouton(connection,numBoite,pageOuverte);
         Thread screen = new Thread(screenUp);
         screen.start();
 

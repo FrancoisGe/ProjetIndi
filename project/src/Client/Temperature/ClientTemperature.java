@@ -38,10 +38,6 @@ public class ClientTemperature {
 
         int i[] = {0};//permet de verifier l etat des données envoyées.
 
-
-
-
-
         try{
             socket = demIP.socketIpServeur();
             System.out.println(socket);
@@ -81,6 +77,14 @@ public class ClientTemperature {
 
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO Vérifier erreur dans test
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            activationBoiteTemp(demIP);
+
         }   catch (InterruptedException e) {
             e.printStackTrace();
 

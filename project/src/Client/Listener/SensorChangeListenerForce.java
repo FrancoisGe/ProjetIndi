@@ -30,23 +30,26 @@ public class SensorChangeListenerForce implements SensorChangeListener {
             //Modifie la valeur maximum si la valeur détectée est supérieur au max précédent.
 
             int valeur ;
-            if (sensorChangeEvent.getIndex() == 0) {
-
-                InterfaceKitPhidget ik = (InterfaceKitPhidget) sensorChangeEvent.getSource();
-
-                valeur = ik.getSensorValue(0) + ik.getSensorValue(2)+  ik.getSensorValue(4) +ik.getSensorValue(6);
-                System.out.println(valeur);
-                if (valeur>max[0]){max[0]=valeur;}
 
 
+            InterfaceKitPhidget ik = (InterfaceKitPhidget) sensorChangeEvent.getSource();
 
-            }
+            valeur = ik.getSensorValue(0) + ik.getSensorValue(2)+  ik.getSensorValue(4) +ik.getSensorValue(6);
+            if (valeur>max[0]){max[0]=valeur;}
+
+
         } catch (PhidgetException e) {
             e.printStackTrace();
         }
-
-
-
-
    }
+
+    public void resetMax(){
+        //Post : la valeur de Maximum enregistée est mise à 0.
+        max[0]=0;
+    }
+
+    public int getMax(){
+        //Post : return la valeur de Maximum enregistrée.
+        return max[0];
+    }
 }

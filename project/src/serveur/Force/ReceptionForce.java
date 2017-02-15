@@ -16,22 +16,24 @@ import java.sql.Statement;
 public class ReceptionForce implements Runnable{
     private String message;//Contient le dernier message recu
     private BufferedReader in;
-    JsonParser parser;
+    private JsonParser parser;
 
-    int[] i;
-    Statement state;
-    String sql;
-    int numBoite;
-    boolean t;
+    private int[] i;
+    private Statement state;
+    private String sql;
+    private int numBoite;
+    private boolean t;
     private boolean isRun =true;
+    private boolean verbose;
 
-    public ReceptionForce (BufferedReader in, int[] i, Statement state, int numBoite){
+    public ReceptionForce (BufferedReader in, int[] i, Statement state, int numBoite,boolean verbose){
         parser = new JsonParser();
         this.in = in;
         this.i = i;
         this.state=state;
         this.numBoite=numBoite;
-        this.t =true;
+        this.t =true;//TODO retirer t qd plus erreur
+        this.verbose=verbose;
     }
 
 
@@ -41,6 +43,7 @@ public class ReceptionForce implements Runnable{
 
         while(isRun){
             try {
+                //ToDO a retirer le message erreur
                 message = in.readLine();
                 //Si on recoit un message d'erreur on ouvre une fenetre pour en avertir l'utilisateur du serveur
                 if (message.equals("erreur "+numBoite)){
@@ -64,7 +67,7 @@ public class ReceptionForce implements Runnable{
                     //On ajoute les données dans la BD
                     sql = "INSERT INTO BoiteForce"+numBoite+" (Valeur,Mois,Jour,Heure,Minute,Seconde) " +
                             "VALUES (" + json.get("Valeur") + "," + json.get("Mois") +"," + json.get("Jour") + "," + json.get("Heure") + ","+ json.get("Minute") + ","+json.get("Seconde")+");";
-                    System.out.println(sql);
+                    if(verbose) {System.out.println(sql);}
                     state.executeUpdate(sql);
                 }
 

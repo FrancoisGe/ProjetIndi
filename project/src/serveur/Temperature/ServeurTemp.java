@@ -1,15 +1,10 @@
 package serveur.Temperature;
 
-import jdk.nashorn.internal.ir.WhileNode;
-import serveur.Bouton.ReceptionBouton;
-import serveur.Bouton.UptateDataScreenButton;
 import serveur.Envoie;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -33,19 +28,17 @@ public class ServeurTemp implements Runnable{
     private Statement statement;
 
     private boolean pageOuverte;
+    private boolean verbose;
 
 
-    public ServeurTemp(int numBoite, Connection c,BufferedReader in,PrintWriter out,boolean pageOuverte){
-
+    public ServeurTemp(int numBoite, Connection c,BufferedReader in,PrintWriter out,boolean pageOuverte,boolean verbose){
 
         this.numBoite=numBoite;
         this.connection= c;
         this.in =in;
         this.out=out;
         this.pageOuverte = pageOuverte;
-
-
-
+        this.verbose=verbose;
     }
 
     @Override
@@ -56,9 +49,10 @@ public class ServeurTemp implements Runnable{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        String nom = "BoiteTemp"+ numBoite;
         try {
             //Création de la table si elle n'existe pas
-        String sql = "CREATE TABLE BoiteTemp"+numBoite+" ("+
+        String sql = "CREATE TABLE "+nom+" ("+
             "Valeur	REAL NOT NULL,"+
             "Jour	INTEGER NOT NULL,"+
             "Heure	INTEGER NOT NULL,"+
@@ -66,26 +60,25 @@ public class ServeurTemp implements Runnable{
             "Seconde	INTEGER NOT NULL,"+
             "Mois	INTEGER NOT NULL);";
 
-            System.out.println(sql);
+            if (verbose){System.out.println(sql);}
 
             statement.executeUpdate(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (verbose) {System.out.println("La table de la "+ nom+" existe déjà dans la BD");}
         }
 
-
-
         //Thread qui recoit et traite les packets de données
-        ReceptionTemp rt =new ReceptionTemp(in,checkReception,statement,numBoite);
+        ReceptionTemp rt =new ReceptionTemp(in,checkReception,statement,numBoite,verbose);
         Thread reception = new Thread(rt);
 
+
         //Thread qui envoie la confirmation de réception des données
-        Envoie ev=new Envoie(out,checkReception);
+        Envoie ev=new Envoie(out,checkReception,verbose,nom);
         Thread envoie = new Thread(ev);
 
 
         //Thread qui ouvre la page Web qui affiche les données et qui créer/met à jour les fichiers de données utilisé par les page web
-        UptateDataScreenTemp us = new UptateDataScreenTemp(connection, numBoite,pageOuverte);
+        UpdateDataScreenTemp us = new UpdateDataScreenTemp(connection, numBoite,pageOuverte);
         Thread screen = new Thread(us);
 
 
@@ -102,7 +95,7 @@ public class ServeurTemp implements Runnable{
              ev.stopRun();
              us.stopRun();
 
-            socket.close();
+             socket.close();
 
 
         } catch (IOException e) {

@@ -16,23 +16,25 @@ import java.sql.Statement;
 public class ReceptionTemp implements Runnable{
     private String message;//Contient le dernier message recu
     private BufferedReader in;
-    JsonParser parser;
+    private JsonParser parser;
 
-    int[] i;
-    Statement state;
-    String sql;
-    int numBoite;
-    boolean t;
+    private int[] i;
+    private Statement state;
+    private String sql;
+    private int numBoite;
+    private boolean t;
 
     private boolean isRun=true;
+    private boolean verbose;
 
-    public ReceptionTemp(BufferedReader in, int[] i, Statement state, int numBoite){
+    public ReceptionTemp(BufferedReader in, int[] i, Statement state, int numBoite,boolean verbose){
         parser = new JsonParser();
         this.in = in;
         this.i = i;
         this.state=state;
         this.numBoite=numBoite;
         this.t=true;
+        this.verbose =verbose;
 
     }
 
@@ -65,7 +67,7 @@ public class ReceptionTemp implements Runnable{
 
                     sql = "INSERT INTO BoiteTemp"+numBoite+ "(Valeur,Mois,Jour,Heure,Minute,Seconde) " +
                             "VALUES (" + json.get("Valeur") + "," + json.get("Mois") +"," + json.get("Jour") + "," + json.get("Heure") + ","+ json.get("Minute") + ","+json.get("Seconde")+");";
-                    System.out.println(sql);
+                    if (verbose){ System.out.println(sql);}
                     state.executeUpdate(sql);
                 }
 

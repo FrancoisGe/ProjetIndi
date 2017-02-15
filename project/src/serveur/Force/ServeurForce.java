@@ -1,15 +1,10 @@
 package serveur.Force;
 
-import Client.Force.EnvoieForce;
-import serveur.Bouton.ReceptionBouton;
-import serveur.Bouton.UptateDataScreenButton;
 import serveur.Envoie;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,16 +29,17 @@ public class ServeurForce implements Runnable {
     private Statement statement;
 
     private boolean pageOuverte;
+    private boolean verbose;
 
 
-    public ServeurForce(int numBoite, Connection c,BufferedReader in,PrintWriter out,boolean pageOuverte) {
+    public ServeurForce(int numBoite, Connection c,BufferedReader in,PrintWriter out,boolean pageOuverte,boolean verbose) {
 
         this.numBoite = numBoite;//Num de la boite avec laquel on communique
         this.connection = c;
         this.in=in;
         this.out=out;
         this.pageOuverte=pageOuverte;
-
+        this.verbose=verbose;
 
 
     }
@@ -51,37 +47,41 @@ public class ServeurForce implements Runnable {
     @Override
     public void run() {
 
-            try {
-                statement = connection.createStatement();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            try {
-                //Création de la Table si elle n'existe pas encore
-                String sql = "CREATE TABLE BoiteForce"+numBoite+"("+
-                "Valeur	INTEGER NOT NULL,"+
-                "Jour	INTEGER NOT NULL,"+
-                "Heure	INTEGER NOT NULL,"+
-                "Minute	INTEGER NOT NULL,"+
-                "Mois	INTEGER NOT NULL,"+
-                "Seconde	INTEGER NOT NULL);";
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String nom ="BoiteForce"+numBoite;
+        try {
+            //Création de la Table si elle n'existe pas encore
+            String sql = "CREATE TABLE "+nom+"("+
+            "Valeur	INTEGER NOT NULL,"+
+            "Jour	INTEGER NOT NULL,"+
+            "Heure	INTEGER NOT NULL,"+
+            "Minute	INTEGER NOT NULL,"+
+            "Mois	INTEGER NOT NULL,"+
+            "Seconde	INTEGER NOT NULL);";
 
-                System.out.println(sql);
+            if (verbose){System.out.println(sql);}
 
-                statement.executeUpdate(sql);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            statement.executeUpdate(sql);
+
+        } catch (SQLException e) {
+            if (verbose) {System.out.println("La table de la "+ nom+" existe déjà dans la BD");}
+        }
+
         //Thread qui recoit et traite les packets de données
-        ReceptionForce rec=new ReceptionForce(in,checkReception,statement,numBoite);
+        ReceptionForce rec=new ReceptionForce(in,checkReception,statement,numBoite,verbose);
         Thread reception = new Thread(rec);
 
+
         //Thread qui envoie la confirmation de réception des données
-        Envoie env=new Envoie(out,checkReception);
+        Envoie env=new Envoie(out,checkReception,verbose,nom);
         Thread envoie = new Thread(env);
 
         //Thread qui ouvre la page Web qui affiche les données et qui créer/met à jour les fichiers de données utilisé par les page web
-        UptateDataScreenForce screenUp =new UptateDataScreenForce(connection,numBoite,pageOuverte);
+        UpdateDataScreenForce screenUp =new UpdateDataScreenForce(connection,numBoite,pageOuverte);
         Thread screen = new Thread(screenUp);
 
         screen.start();
