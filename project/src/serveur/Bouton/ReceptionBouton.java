@@ -22,7 +22,6 @@ public class ReceptionBouton implements Runnable{
     private Statement state;
     private String sql;
     private int numBoite;
-    private boolean pasErreur;//Vrai tant qu'on a pas recu de message d erreur d'une boite.
     private boolean isRun;
     private boolean verbose;
 
@@ -32,7 +31,6 @@ public class ReceptionBouton implements Runnable{
         this.i = i;
         this.state=state;
         this.numBoite=numBoite;
-        this.pasErreur =true;
         this.isRun =true;
         this.verbose=verbose;
     }
@@ -45,21 +43,6 @@ public class ReceptionBouton implements Runnable{
         while(isRun){
             try {
                 message = in.readLine();
-                //Si on recoit un message d'erreur on ouvre une fenetre pour en avertir l'utilisateur du serveur
-                if (message.equals("erreur "+numBoite)) {
-                    if (pasErreur){
-                        System.out.println("Il y a des données perdues pour la boiteBouton "+numBoite);
-                        File f = new File("C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
-                        FileWriter fw = new FileWriter(f);
-                        fw.write("Il y a des données perdues pour la boiteBouton "+numBoite);
-                        fw.close();
-                        Process proc = Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe C:\\ProjetIndividuel\\project\\src\\serveur\\erreur.html");
-                        pasErreur = false;
-                    }
-                }
-                else {
-
-                    pasErreur=true;
 
                     //On  parse le packet de données recu
                     JsonObject json = parser.parse(message).getAsJsonObject();
@@ -73,7 +56,6 @@ public class ReceptionBouton implements Runnable{
                             "VALUES (" + json.get("Valeur") + "," + json.get("Jour") + "," + json.get("Index") + ","+json.get("Heure")+");";
                     if(verbose){ System.out.println(sql);}
                     state.executeUpdate(sql);
-                }
 
             } catch (IOException e) {
                 isRun=false;

@@ -58,16 +58,22 @@ public class ClientTemperature {
 
             EnvoieTemp env = new EnvoieTemp(out,i,s);
             Thread envoieTemp = new Thread(env);
-            Thread reception =new Thread(new Reception(in,i,out,numBoite));
+            Reception rec =new Reception(in,i,out,numBoite);
+            Thread reception =new Thread(rec);
 
             reception.start();
             envoieTemp.start();
 
-            while(reception.isAlive()){
+            //Vérifie que Reception et Envoie sont encore en vie et qu'il n'y a pas trop de perte de packets
+            while(reception.isAlive() && (i[0]<50) && envoieTemp.isAlive()){
                 Thread.sleep(50);
             }
 
-            env.stopRun();
+
+
+            if (envoieTemp.isAlive()) {env.stopRun();}
+            if(reception.isAlive()) {rec.stopRun();}
+
             socket.close();
 
             Thread.sleep(1000);

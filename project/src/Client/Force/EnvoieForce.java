@@ -76,6 +76,11 @@ public class EnvoieForce implements Runnable{
                 out.flush();
 
                 s.resetMax();
+
+                if (i[0]>50){
+                    isRun=false;
+                }
+
                 Thread.sleep(1000);
             }
             ik.close();

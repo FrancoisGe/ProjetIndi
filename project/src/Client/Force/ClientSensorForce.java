@@ -64,16 +64,20 @@ public class ClientSensorForce {
             EnvoieForce env = new EnvoieForce(out,i,s);//Thread qui envoie les données au serveur
             Thread envoie = new Thread(env);
 
-            Thread reception =new Thread(new Reception(in,i,out,numBoite));//Thread qui recoit les confimation du serveur
+            Reception rec = new Reception(in,i,out,numBoite);
+            Thread reception =new Thread(rec);// Thread qui va recevoir la validation de la reception des données par le serveur
             envoie.start();
             reception.start();
 
-
-            while(reception.isAlive()){
+            //Vérifie que Reception et Envoie sont encore en vie et qu'il n'y a pas trop de perte de packets
+            while(reception.isAlive() && (i[0]<50) && envoie.isAlive()){
                 Thread.sleep(50);
             }
 
-            env.stopRun();
+
+            if (reception.isAlive()) {rec.stopRun();}
+            if (envoie.isAlive()) {env.stopRun();}
+
             socket.close();
 
             Thread.sleep(1000);

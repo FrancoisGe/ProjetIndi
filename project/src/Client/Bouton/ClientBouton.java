@@ -66,18 +66,19 @@ public class ClientBouton {
             Envoie env = new Envoie(out,i,s);//Thread qui va envoyer les données au serveur
             Thread envoie = new Thread(env);
 
-            Thread reception =new Thread(new Reception(in,i,out,numBoite));// Thread qui va recevoir la validation de la reception des données par le serveur
+            Reception rec = new Reception(in,i,out,numBoite);
+            Thread reception =new Thread(rec);// Thread qui va recevoir la validation de la reception des données par le serveur
             envoie.start();
             reception.start();
 
-
-            while(reception.isAlive()){
+            //Vérifie que Reception est encore en vie et qu'il n'y a pas trop de perte de packets
+            while(reception.isAlive() && (i[0]<50)){
                 Thread.sleep(50);
-
             }
 
+            if(reception.isAlive()) {rec.stopRun();}
+
             if (env.getIk()==(null)){
-                System.out.println("ok");
             }
             else {
                 env.getIk().close();
