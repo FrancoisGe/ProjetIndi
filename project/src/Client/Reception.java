@@ -12,17 +12,20 @@ import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
 public class Reception implements Runnable {
     private BufferedReader in;
     private int[] i;
-    private PrintWriter out;
     private boolean isRun;
-    private int numBoite;
+
+    /**
+     * Ce Thread permet de savoir le nombre de paquets que le serveur à reçu
+     *
+     * @param in Buffer dans le quel on va recevoir le nombre de paquets reçu par le serveur pendant la dernière seconde
+     * @param i tableau contenant une seul valeur à l'indice 0 qui est le nombre de paquets de données envoyées moins le nombre de paquets que le serveur à dit qu'il avait reçu
+     */
 
 
-    public Reception(BufferedReader in,int[] i,PrintWriter out,int numBoite){
+    public Reception(BufferedReader in,int[] i){
         this.in =in;
         this.i=i;
-        this.out =out;
         isRun=true;
-        this.numBoite = numBoite;
 
     }
 
@@ -38,7 +41,7 @@ public class Reception implements Runnable {
 
 
                 //Si une trop grosse perte de packet on envoie un message d'erreur car cela signifie qu'il y un problème technique et cela permet d'en informer le serveur
-                if(i[0]>50){
+                if(i[0]>100){
                     i[0]=0;
                     isRun=false;
                 }
@@ -53,7 +56,9 @@ public class Reception implements Runnable {
 
     }
 
-
+    /**
+     * Arrête le Thread si il est actif
+     */
     public void stopRun(){
         isRun=false;
     }

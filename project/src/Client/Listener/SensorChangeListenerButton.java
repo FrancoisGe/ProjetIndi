@@ -16,6 +16,12 @@ public class SensorChangeListenerButton implements SensorChangeListener {
 
     private int[] i;
 
+    /**
+     *
+     * @param out Buffer dans le quel on met les messages à envoyer (le port du boutton + date + valeur)
+     * @param i tableau contenant une seul valeur à l'indice 0 qui est le nombre de paquets de données envoyées moins le nombre de paquets que le serveur à dit qu'il avait reçu
+     */
+
     public SensorChangeListenerButton(PrintWriter out, int[] i){
 
         this.out = out;

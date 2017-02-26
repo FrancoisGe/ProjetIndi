@@ -30,6 +30,20 @@ public class ServeurTemp implements Runnable{
     private boolean pageOuverte;
     private boolean verbose;
 
+    /**
+     * Quand ce Thread est actif, il gère les données émises par la boite Temp à laquel il est connecté. Il gère l'ouverture des pages Web nécessaires et la mise à jour des données.
+     *
+     *
+     * @param numBoite : numéro de la boite avec laquel on communique et à encoder dans la BD
+     * @param c : Connection à la base de données
+     * @param in : buffer dans lequel on va communiquer avec la boite connectée
+     * @param out : buffer dans lequel on recoit les message de la boite connecté
+     * @param pageOuverte : True si la page de la boite connectée a déjà été ouverte sur le navigateur
+     *                      False si pas encore ouverte sur le navigateur
+     * @param verbose: Permet de savoir si le mode verbose est actif
+     *                  True = actif
+     *                  False = desactivé
+     */
 
     public ServeurTemp(int numBoite, Connection c,BufferedReader in,PrintWriter out,boolean pageOuverte,boolean verbose){
 

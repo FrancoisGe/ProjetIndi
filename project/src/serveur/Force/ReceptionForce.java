@@ -25,6 +25,17 @@ public class ReceptionForce implements Runnable{
     private boolean isRun =true;
     private boolean verbose;
 
+    /**
+     * Quand ce Thread est actif il gère la réception des données émise par la boite connectée et leur insertion dans la BD
+     *
+     * @param in : buffer dans lequel on va communiquer avec la boite connectée
+     * @param i : à l'indice 0, on a le nombre de packets de données reçus que l'on n'a pas encore averti la boite de leur réception
+     * @param state : statement dans lequel on va insérer les données reçues
+     * @param numBoite : numéro de la boite avec laquel on communique et à encoder dans la BD
+     * @param verbose : Permet de savoir si le mode verbose est actif
+     *                  True = actif
+     *                  False = desactivé
+     */
     public ReceptionForce (BufferedReader in, int[] i, Statement state, int numBoite,boolean verbose){
         parser = new JsonParser();
         this.in = in;
@@ -56,12 +67,15 @@ public class ReceptionForce implements Runnable{
 
             } catch (IOException e) {
                 isRun=false;
-                e.printStackTrace();
+                if(verbose){System.out.println("La BoiteForce "+numBoite+" a été déconnectée");}
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
+    /**
+     * Arrête le Thread si il est actif
+     */
     public void stopRun(){
         isRun=false;
     }

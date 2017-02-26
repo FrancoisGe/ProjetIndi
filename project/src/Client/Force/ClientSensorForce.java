@@ -27,6 +27,10 @@ public class ClientSensorForce {
 
 
     }
+    /**
+     *
+     * @param demIP Objet qui nous permet de récuperer l'ip du serveur. Il doit déjà avoir été créé et activé.
+     */
 
     private static void activationBoiteTemp(DemandeIPServeur demIP){
         Socket socket = new Socket();
@@ -38,11 +42,6 @@ public class ClientSensorForce {
         int numBoite=1;
 
         int i[] = {0};//permet de verifier l etat des données envoyées.
-        int max[]={0};//Valeur maximum enregistrée par la somme des capteurs de forces
-
-
-
-
 
         try{
             socket = demIP.socketIpServeur();
@@ -50,7 +49,7 @@ public class ClientSensorForce {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
 
-            //Envoie du premier message pour donner le num de la boite et son type
+            //envoie du premier message pour donner le num de la boite et son type
             JsonObject json = new JsonObject();
             json.addProperty("numType", numType);
             json.addProperty("numBoite", numBoite);
@@ -58,22 +57,23 @@ public class ClientSensorForce {
             out.println(json);
             out.flush();
 
-            SensorChangeListenerForce s =new SensorChangeListenerForce(out,max);
+            SensorChangeListenerForce s =new SensorChangeListenerForce();
 
 
             EnvoieForce env = new EnvoieForce(out,i,s);//Thread qui envoie les données au serveur
             Thread envoie = new Thread(env);
 
-            Reception rec = new Reception(in,i,out,numBoite);
+            Reception rec = new Reception(in,i);
             Thread reception =new Thread(rec);// Thread qui va recevoir la validation de la reception des données par le serveur
             envoie.start();
             reception.start();
 
-            //Vérifie que Reception et Envoie sont encore en vie et qu'il n'y a pas trop de perte de packets
+            //Vérifie que Reception et EnvoieForce sont encore en vie et qu'il n'y a pas trop de perte de packets
             while(reception.isAlive() && (i[0]<50) && envoie.isAlive()){
                 Thread.sleep(50);
             }
 
+            Thread.sleep(1000);
 
             if (reception.isAlive()) {rec.stopRun();}
             if (envoie.isAlive()) {env.stopRun();}

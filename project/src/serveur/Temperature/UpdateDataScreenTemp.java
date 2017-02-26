@@ -2,8 +2,7 @@ package serveur.Temperature;
 
 
 import com.google.gson.JsonObject;
-import serveur.Serveur;
-import serveur.ServeurPrincipale;
+import serveur.ServeurPrincipal;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -12,7 +11,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ResourceBundle;
 
 /**
  * Created by François on 02-12-16.
@@ -29,14 +27,20 @@ public class UpdateDataScreenTemp implements Runnable {
 
     private boolean pageOuverte;
 
+    /**
+     * Quand il est actif, ce Thread gère l'ouverture de la pages Web renseignée dans le fichier de Config(pageTemp1), la mise à jour des données pour la page Web(nft1 dans le fichier de Config).
+     *
+     * @param c : Connection à la base de données
+     * @param numBoite : numéro de la boite avec laquel on communique et à encoder dans la BD
+     * @param pageOuverte : True si la page de la boite connectée a déjà été ouverte sur le navigateur
+     *                      False si pas encore ouverte sur le navigateur
+     */
+
 
     public UpdateDataScreenTemp(Connection c, int numBoite, boolean pageOuverte){
-        JsonObject json = null;
-        try {
-            json = ServeurPrincipale.créerJsonAvecFile("Config.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        JsonObject json = ServeurPrincipal.creerJsonAvecFile("Config.txt");
+
         //nf1 contient l'adress à la quel on doit créer le fichier de données
         String nf1 = json.get("nft1").getAsString();
         f = new File(nf1);
@@ -93,23 +97,33 @@ public class UpdateDataScreenTemp implements Runnable {
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println ("\n\nLe chemin d'accès du fichier : "+e.fillInStackTrace().getMessage());
+            System.out.println("Veillez vérifier si vous n'avez commis une erreur dans le fichier de Config.txt au niveau du chemin d'accès\n\n");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+    /**
+     *
+     * @param j jour dans le mois
+     * @param m mois (janvier =0)
+     * @return  le jour de l'année (1 à 366) selon le jour j du mois m
+     */
 
     public static int jourAnnee(int j,int m){
-        //Pre: j = jour et m = mois
-        //Post : renvoie le jour entre 1 et 366
+
         if(m==0){return j;}
         if(m==1){return j+31;}
         if (m==2){return 31+29+j;}
         if (m % 2 ==0){return jourAnnee(j,m-1)+30;}
         else{return jourAnnee(j,m-1)+31;}
     }
+
+    /**
+     * Arrête le Thread si il est actif
+     */
 
     public void stopRun(){
         isRun=false;

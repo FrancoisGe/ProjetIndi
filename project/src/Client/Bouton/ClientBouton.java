@@ -15,6 +15,8 @@ import java.net.Socket;
 /**
  * Created by François on 29-10-16.
  */
+
+
 public class ClientBouton {
 
     public static void main(String[] args) throws IOException {
@@ -29,6 +31,10 @@ public class ClientBouton {
 
     }
 
+    /**
+     *
+     * @param demIP Objet qui nous permet de récuperer l'ip du serveur. Il doit déjà avoir été créé et activé.
+     */
     private static void activationBoiteTemp(DemandeIPServeur demIP){
         Socket socket = new Socket();
 
@@ -40,12 +46,6 @@ public class ClientBouton {
 
 
         int i[] = {0};//permet de verifier l etat des données envoyées.
-
-
-
-
-
-
 
         try{
             socket = demIP.socketIpServeur();
@@ -63,18 +63,19 @@ public class ClientBouton {
 
             SensorChangeListenerButton s =new SensorChangeListenerButton(out,i);
 
-            Envoie env = new Envoie(out,i,s);//Thread qui va envoyer les données au serveur
+            Envoie env = new Envoie(s);//Thread qui va envoyer les données au serveur
             Thread envoie = new Thread(env);
 
-            Reception rec = new Reception(in,i,out,numBoite);
+            Reception rec = new Reception(in,i);
             Thread reception =new Thread(rec);// Thread qui va recevoir la validation de la reception des données par le serveur
             envoie.start();
             reception.start();
 
             //Vérifie que Reception est encore en vie et qu'il n'y a pas trop de perte de packets
-            while(reception.isAlive() && (i[0]<50)){
+            while(reception.isAlive() && (i[0]<100)){
                 Thread.sleep(50);
             }
+            Thread.sleep(5000);
 
             if(reception.isAlive()) {rec.stopRun();}
 
@@ -86,7 +87,7 @@ public class ClientBouton {
 
             socket.close();
 
-            Thread.sleep(1000);
+            Thread.sleep(100);
 
             activationBoiteTemp(demIP);
 

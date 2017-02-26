@@ -20,27 +20,28 @@ public class EnvoieTemp implements Runnable{
     private SensorChangeListenerTemperature s;
     private boolean isRun = true;
 
-
-
     private int[] i;
+
+    /**
+     * Ce Thread quand il est actif gère l'envoie des données au Serveur par out.
+     *
+     * @param out Buffer dans lequel on met les messages à envoyer (le maximum enregistré toutes les secondes + la date)
+     * @param i tableau contenant une seul valeur à l'indice 0 qui est le nombre de paquets de données envoyées moins le nombre de paquets que le serveur à dit qu'il avait reçu
+     * @param s SensorChangeListener utiliser pour configurer l'interfaceKitPhidget
+     */
 
     public EnvoieTemp(PrintWriter out,int[] i,SensorChangeListenerTemperature s){
         this.out = out;
         this.i =i;
         this.s=s;
 
-
     }
 
     @Override
     public void run() {
 
-
-
-
-
             try {
-                ik = OpenNewPhidget.initIK(out, i, s);
+                ik = OpenNewPhidget.initIK(s);
                 ik.setSensorChangeTrigger(0,2);
 
                 //Thread qui va gérer l'allumage des leds
@@ -56,9 +57,10 @@ public class EnvoieTemp implements Runnable{
                     int heure = date.getHours();
                     int jour = date.getDate();
                     int mois = date.getMonth();
-                    double valeur = (ik.getSensorValue(0) * 0.2222) - 61.111;
+                    s.setValMax(ik.getSensorValue(0));
+                    double valeur = (s.getMax() * 0.2222) - 61.111;
 
-                    //envoie un packet de données toutes les 10 sec (Date +température)
+                    //envoie un packet de données toutes les 1 sec (Date +température)
                     JsonObject json = new JsonObject();
                     json.addProperty("Heure", heure);
                     json.addProperty("Minute", minute);
@@ -75,11 +77,12 @@ public class EnvoieTemp implements Runnable{
                     out.println(json);
                     out.flush();
 
-
-                    Thread.sleep(10000);
+                    s.resetMax();
+                    Thread.sleep(1000);
                 }
-                ik.close();
                 l.stopRun();
+                ik.close();
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (PhidgetException e) {
@@ -90,10 +93,9 @@ public class EnvoieTemp implements Runnable{
 
 
     }
-    public InterfaceKitPhidget getIk(){
-        return ik;
-    }
-
+    /**
+     * Arrête le Thread si il est actif
+     */
     public void stopRun(){
         isRun=false;
     }

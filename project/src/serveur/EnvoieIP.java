@@ -14,10 +14,20 @@ public class EnvoieIP implements Runnable {
     private boolean isRun =true;
     private boolean verbose;
 
+    /**
+     *
+     * @param verbose : Permet de savoir si le mode verbose est actif
+     *                  True = actif
+     *                  False = desactivé
+     */
     public EnvoieIP(boolean verbose){
         this.verbose = verbose;
 
     }
+
+    /*
+     *Qd il est actif, ce Thread gère la réception de demande d'IP d'une boite et lui envoie son IP (Ip serveur).
+     */
     @Override
     public void run() {
         try {
@@ -50,6 +60,9 @@ public class EnvoieIP implements Runnable {
 
 
     }
+    /**
+     * Arrête le Thread si il est actif
+     */
     public void stopRun(){
         isRun=false;
     }

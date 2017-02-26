@@ -15,6 +15,19 @@ public class LedAffichage implements Runnable{
     private boolean isRun=true;
 
 
+    /**
+     * Quand ce Thread est actif, il allume et éteint les leds de l'interfaceKitPhidget par rapport à la valeur max enregistrée.
+     * La première led est allumée quand la valeur actuel (somme enregistré par les port 0,2,4,6 de InterfaceKitPhidget) est suppérieur au min enregistré
+     * La deuxième led est allumée quand la valeur actuel (somme enregistré par les port 0,2,4,6 de InterfaceKitPhidget) est suppérieur au (min + (max-min)/6)
+     * La troisième led est allumée quand la valeur actuel (somme enregistré par les port 0,2,4,6 de InterfaceKitPhidget) est suppérieur au (min +(2*(max-min)/6
+     * La quatrième led est allumée quand la valeur actuel (somme enregistré par les port 0,2,4,6 de InterfaceKitPhidget) est suppérieur au (min +(3*(max-min)/6
+     * La cinquième led est allumée quand la valeur actuel (somme enregistré par les port 0,2,4,6 de InterfaceKitPhidget) est suppérieur au (min +(5*(max-min)/6
+     * La sixième led est allumée quand la valeur actuel (somme enregistré par les port 0,2,4,6 de InterfaceKitPhidget) est suppérieur au (min +(6*(max-min)/6
+     * min est la valeur minimum enregistré (somme enregistré par les port 0,2,4,6 de InterfaceKitPhidget)
+     * max est la valeur maximum enregistré (somme enregistré par les port 0,2,4,6 de InterfaceKitPhidget)
+     *
+     * @param ik InterfaceKitPhidget sur le quel on va récupérer les données et allumer les leds.
+     */
     public LedAffichage(InterfaceKitPhidget ik){
         this.ik =ik;
 

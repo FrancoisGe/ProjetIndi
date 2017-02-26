@@ -17,7 +17,6 @@ import java.sql.Connection;
  */
 public class Serveur implements Runnable {
 
-
     private Socket socket = new Socket();
 
     private PrintWriter out = null;
@@ -31,9 +30,21 @@ public class Serveur implements Runnable {
 
     /**
      *
-     * @param socket
-     * @param c
-     * @param pageWebActive
+     * @param socket : socket qui est utilisé pour la communication TCP entre le serveur et la boite connectée
+     * @param c : Connection à la base de données
+     * @param pageWebActive :   Tableau content la liste de toutes les boites qui se sont déjà connectées
+     *                          la valeur pageWebActive[0][0] contient le nombre de pair ajouté dans le tableau
+     *                          Ex:
+     *                          On connecte une première boite : boiteTemp2 sera pageWebActive[1][0]=1 et pageWebActive[1][0] = 2
+     *                          Première valeur le type et la deuxième le num de la boite.
+     *
+     *                          Valeur Type boite :
+     *                          Boite Bouton=0;
+     *                          Boite Température=1;
+     *                          Boite Force=2;
+     * @param verbose : Permet de savoir si le mode verbose est actif
+     *                  True = actif
+     *                  False = desactivé
      */
     public Serveur(Socket socket, Connection c,int[][] pageWebActive,boolean verbose) {
         this.pageWebActive = pageWebActive;

@@ -27,6 +27,10 @@ public class ClientTemperature {
 
 
     }
+    /**
+     *
+     * @param demIP Objet qui nous permet de récuperer l'ip du serveur. Il doit déjà avoir été créé et activé.
+     */
 
     private static void activationBoiteTemp(DemandeIPServeur demIP){
         Socket socket = null;
@@ -54,11 +58,11 @@ public class ClientTemperature {
             out.println(json);
             out.flush();
 
-            SensorChangeListenerTemperature s =new SensorChangeListenerTemperature(out,i);
+            SensorChangeListenerTemperature s =new SensorChangeListenerTemperature();
 
             EnvoieTemp env = new EnvoieTemp(out,i,s);
             Thread envoieTemp = new Thread(env);
-            Reception rec =new Reception(in,i,out,numBoite);
+            Reception rec =new Reception(in,i);
             Thread reception =new Thread(rec);
 
             reception.start();
@@ -68,6 +72,8 @@ public class ClientTemperature {
             while(reception.isAlive() && (i[0]<50) && envoieTemp.isAlive()){
                 Thread.sleep(50);
             }
+
+            Thread.sleep(1000);
 
 
 
@@ -83,7 +89,7 @@ public class ClientTemperature {
 
         } catch (IOException e) {
             e.printStackTrace();
-            //TODO Vérifier erreur dans test
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e1) {

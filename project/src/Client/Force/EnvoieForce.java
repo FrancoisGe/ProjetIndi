@@ -20,11 +20,15 @@ public class EnvoieForce implements Runnable{
     private SensorChangeListenerForce s;
     private boolean isRun=true;
 
-
-
-
     private int[] i;
 
+    /**
+     * Ce Thread quand il est actif gère l'envoie des données au Serveur par out.
+     *
+     * @param out Buffer dans lequel on met les messages à envoyer (le maximum enregistré toutes les secondes + la date)
+     * @param i tableau contenant une seul valeur à l'indice 0 qui est le nombre de paquets de données envoyées moins le nombre de paquets que le serveur à dit qu'il avait reçu
+     * @param s SensorChangeListener utiliser pour configurer l'interfaceKitPhidget
+     */
     public EnvoieForce(PrintWriter out, int[] i, SensorChangeListenerForce s){
         this.out = out;
         this.i =i;
@@ -39,7 +43,7 @@ public class EnvoieForce implements Runnable{
 
 
         try {
-            ik = OpenNewPhidget.initIK(out, i, s);//Création de l objet gérant les phidget
+            ik = OpenNewPhidget.initIK(s);//Création de l objet gérant les phidget
 
             //Thread qui va gérer l'allumage des leds
             LedAffichage l =new LedAffichage(ik);
@@ -77,14 +81,11 @@ public class EnvoieForce implements Runnable{
 
                 s.resetMax();
 
-                if (i[0]>50){
-                    isRun=false;
-                }
-
                 Thread.sleep(1000);
             }
-            ik.close();
             l.stopRun();
+            ik.close();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (PhidgetException e) {
@@ -94,10 +95,10 @@ public class EnvoieForce implements Runnable{
         }
 
     }
-    public InterfaceKitPhidget getIk(){
-        return ik;
-    }
 
+    /**
+     * Arrête le Thread si il est actif
+     */
     public void stopRun(){
         isRun=false;
     }

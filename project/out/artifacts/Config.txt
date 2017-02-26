@@ -1,10 +1,11 @@
-{"bd":BDProjetIndividuel.db,
-"nft1":"C:\\wamp64\\www\\data1.tsv",
+{
+"bd":BDProjetIndividuel.db,
+"nft1":"C:\\wamp\\ww\\data1.tsv",
 "pageTemp1":"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe http://localhost/mapageTemp.html",
-"nf1":"C:\\wamp64\\www\\dataA",
-"nf2":"C:\\wamp64\\www\\dataB",
-"page1":"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe http://localhost/mapageBouton1.html",
-"page2":"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe http://localhost/mapageBouton2.html",
-"nff1"="C:\\wamp64\\www\\dataforce.tsv",
+"nfba1":"C:\\wamp\\www\\dataA",
+"nfbb1":"C:\\wamp\\www\\dataB",
+"pageBoutonB":"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe http://localhost/mapageBoutonB.html",
+"pageBoutonA":"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe http://localhost/mapageBoutonA.html",
+"nff1"="C:\\wamp\\www\\dataforce.tsv",
 "pageForce1"="C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe http://localhost/mapageForce.html"
 }

@@ -13,13 +13,10 @@ import java.io.PrintWriter;
  */
 public class SensorChangeListenerForce implements SensorChangeListener {
 
-    private int[] max;
+    private int max;
 
 
-    public SensorChangeListenerForce(PrintWriter out, int[] max){
-
-
-        this.max=max;
+    public SensorChangeListenerForce( ){
     }
     @Override
     public void sensorChanged(SensorChangeEvent sensorChangeEvent) {
@@ -35,7 +32,7 @@ public class SensorChangeListenerForce implements SensorChangeListener {
             InterfaceKitPhidget ik = (InterfaceKitPhidget) sensorChangeEvent.getSource();
 
             valeur = ik.getSensorValue(0) + ik.getSensorValue(2)+  ik.getSensorValue(4) +ik.getSensorValue(6);
-            if (valeur>max[0]){max[0]=valeur;}
+            if (valeur>max){max=valeur;}
 
 
         } catch (PhidgetException e) {
@@ -43,13 +40,20 @@ public class SensorChangeListenerForce implements SensorChangeListener {
         }
    }
 
+    /**
+     * la valeur maximum est remise à 0
+     */
     public void resetMax(){
-        //Post : la valeur de Maximum enregistée est mise à 0.
-        max[0]=0;
+
+        max=0;
     }
 
+    /**
+     *
+     * @return la valeur maximum
+     */
     public int getMax(){
-        //Post : return la valeur de Maximum enregistrée.
-        return max[0];
+
+        return max;
     }
 }

@@ -1,13 +1,9 @@
 package Client.Listener;
 
-import com.google.gson.JsonObject;
-import com.phidgets.InterfaceKitPhidget;
-import com.phidgets.PhidgetException;
+
 import com.phidgets.event.SensorChangeEvent;
 import com.phidgets.event.SensorChangeListener;
 
-import java.io.PrintWriter;
-import java.util.Date;
 
 /**
  * Created by User on 02-12-16.
@@ -15,49 +11,45 @@ import java.util.Date;
 public class SensorChangeListenerTemperature implements SensorChangeListener{
 
 
-    private PrintWriter out ;
+    private int max=0;
 
-    private int[] i;
-
-
-
-    public SensorChangeListenerTemperature(PrintWriter out, int[] i){
-
-        this.out = out;
-        this.i=i;
+    public SensorChangeListenerTemperature(){
 
     }
     @Override
     public void sensorChanged(SensorChangeEvent sensorChangeEvent) {
 
-        Date date = new Date();
-        int seconde = date.getSeconds();
-        int minute = date.getMinutes();
-        int heure = date.getHours();
-        int jour = date.getDate();
-        int mois =date.getMonth();
 
-
-        //Envoie d'un packet de données avec la date et la température
-        double valeur = (sensorChangeEvent.getValue()*0.2222)-61.111;
-        if (valeur>-5) {
-            JsonObject json = new JsonObject();
-            json.addProperty("Heure", heure);
-            json.addProperty("Minute", minute);
-            json.addProperty("Seconde", seconde);
-            json.addProperty("Valeur", valeur);
-            json.addProperty("Jour", jour);
-            json.addProperty("Mois",mois);
-
-            System.out.println(json);
-
-            i[0] = i[0] + 1;
-            System.out.println("envoie :" + i[0]);
-
-            out.println(json);
-            out.flush();
+        if (max<sensorChangeEvent.getValue()){
+            max=sensorChangeEvent.getValue();
         }
 
+    }
 
+    /**
+     * la valeur maximum est remise à 0
+     */
+    public void resetMax(){
+        //Post : la valeur de Maximum enregistée est mise à 0.
+        max=0;
+    }
+
+    /**
+     *
+     * @return la valeur maximum
+     */
+    public int getMax(){
+        //Post : return la valeur de Maximum enregistrée.
+        return max;
+    }
+
+    /**
+     *
+     * @param m devient la nouvel valeur maximum
+     */
+    public void setValMax(int m){
+        if (max<m){
+            max=m;
+        }
     }
 }

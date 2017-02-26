@@ -1,7 +1,7 @@
 package serveur.Bouton;
 
 import com.google.gson.JsonObject;
-import serveur.ServeurPrincipale;
+import serveur.ServeurPrincipal;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ResourceBundle;
 
 /**
  * Created by User on 15-11-16.
@@ -27,26 +26,30 @@ public class UpdateDataScreenBouton implements Runnable {
 
     private boolean pageOuverte;
 
-
+    /**
+     * Quand il est actif, ce Thread gère l'ouverture de les pages Web renseignée dans le fichier de Config(pageBoutonA,pageBoutonB), la mise à jour des données pour la page Web(nfba1,nfbb1 dans le fichier de Config).
+     *
+     * @param c : Connection à la base de données
+     * @param numBoite : numéro de la boite avec laquel on communique et à encoder dans la BD
+     * @param pageOuverte : True si la page de la boite connectée a déjà été ouverte sur le navigateur
+     *                      False si pas encore ouverte sur le navigateur
+     */
 
 
     public UpdateDataScreenBouton(Connection c, int numBoite, boolean pageOuverte){
         this.isRun =true;
-        JsonObject json = null;
-        try {
-            json = ServeurPrincipale.créerJsonAvecFile("Config.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String nf1 = json.get("nf1").getAsString();
+
+        JsonObject json = ServeurPrincipal.creerJsonAvecFile("Config.txt");
+
+        String nf1 = json.get("nfba1").getAsString();
         nf1 = nf1+numBoite+".csv";
 
-        String nf2 = json.get("nf2").getAsString();
+        String nf2 = json.get("nfbb1").getAsString();
         nf2 = nf2+numBoite+".csv";
         f = new File(nf1) ;
 
-        page=json.get("page1").getAsString();
-        page2=json.get("page2").getAsString();
+        page=json.get("pageBoutonB").getAsString();
+        page2=json.get("pageBoutonA").getAsString();
         this.numBoite=numBoite;
         this.pageOuverte=pageOuverte;
 
@@ -65,10 +68,11 @@ public class UpdateDataScreenBouton implements Runnable {
     @Override
     public void run() {
         //Utilisation des noms assignés aux différents boutons
-        ResourceBundle rb = ResourceBundle.getBundle("serveur.domaine.properties.configName");
+        JsonObject json = ServeurPrincipal.creerJsonAvecFile("ConfigNameBouton.txt");
+
         String[] bouton=new String[8];//tableau qui contient les noms affichés pour les boutons
         for (int i = 0; i <8 ; i++) {
-            bouton[i]=rb.getString("b"+i);
+            bouton[i]=json.get("b"+i).getAsString();
         }
 
         try {
@@ -172,12 +176,9 @@ public class UpdateDataScreenBouton implements Runnable {
                 Thread.sleep(10000);
             }
 
-
-
-
-
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println ("\n\nLe chemin d'accès du fichier : "+e.fillInStackTrace().getMessage());
+            System.out.println("Veillez vérifier si vous n'avez commis une erreur dans le fichier de Config.txt au niveau du chemin d'accès\n\n");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -187,6 +188,11 @@ public class UpdateDataScreenBouton implements Runnable {
 
     }
 
+    /**
+     *
+     * @param jour jour de la semaine
+     * @return le jour de la semaine en String (Lundi,Mardi...)
+     */
 
     public static String ConvertirIntJour(int jour){
         //Post : renvoit selon la valeur du jour le jour correspondant en String
@@ -207,6 +213,9 @@ public class UpdateDataScreenBouton implements Runnable {
 
         }
     }
+    /**
+     * Arrête le Thread si il est actif
+     */
     public void stopRun(){
         isRun=false;
     }
